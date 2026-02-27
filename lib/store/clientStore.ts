@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { DefaultGameState, IGameState } from "../JeopardyGame/IGameState";
 import { useStoreWithEqualityFn } from "zustand/traditional";
+import deepEqual from "fast-deep-equal";
 
 interface ClientStore {
   gameState: IGameState;
@@ -31,3 +32,9 @@ export const useClientGameStore = create<ClientStore>((set, get) => ({
       gameState: { ...store.gameState, players: newState.players },
     })),
 }));
+
+export function useDeepEqualGameStore<T>(
+  selector: (state: ReturnType<typeof useClientGameStore.getState>) => T
+) {
+  return useStoreWithEqualityFn(useClientGameStore, selector, deepEqual);
+}

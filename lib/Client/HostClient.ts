@@ -27,6 +27,9 @@ export default class HostClient {
   public KickPlayer(player: IPlayer) {
     this.socket.emit("host-kick-player", player);
   }
+  public PermanentlyDeletePlayer(player: IPlayer) {
+    this.socket.emit("host-permanently-delete-player", player);
+  }
   public OpenBuzzer() {
     this.socket.emit("host-open-buzzer");
   }
@@ -45,5 +48,9 @@ export default class HostClient {
   }
   public AwardPlayerIncorrectAnswer(player: IPlayer) {
     this.socket.emit("host-award-player-incorrect-answer", player);
+  }
+
+  public ResetCurrentQuestion() {
+    this.socket.emit("host-reset-current-question");
   }
 }

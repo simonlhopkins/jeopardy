@@ -17,16 +17,19 @@ interface ServerStore {
   setCurrentQuestion: (question: IQuestion) => void;
   connectPlayer: (player: IPlayer) => void;
   disconnectPlayer: (socketId: string) => void;
-  increasePoints: (by: number) => void;
+  permanentlyDeletePlayer: (playerToRemove: IPlayer) => void;
   openBuzzer: () => void;
   closeBuzzer: () => void;
   addBuzzToHistory: (buzzData: IBuzzerSubmitData) => void;
   nextQuestion: () => void;
+  resolveQuestion: () => void;
   resetGame: () => void;
+  resetCurrentQuestion: () => void;
   AwardPlayerCorrectAnswer: (player: IPlayer) => void;
   AwardPlayerIncorrectAnswer: (player: IPlayer) => void;
-  SetTimeLeftToAnswer: (secondsLeft: number) => void;
-  givePlayerChanceToAnswer: () => void;
+  SetTimeLeftForPlayerToAnswer: (secondsLeft: number) => void;
+  SetTimeLeftForAllPlayersToAnswer: (secondsLeft: number) => void;
+  givePlayerChanceToAnswer: (player: IPlayer) => void;
 }
 
 export const useServerGameStore = create<ServerStore>((set, get) => ({
@@ -34,6 +37,17 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
   connectPlayer: (newPlayer: IPlayer) =>
     set((store) => {
       const state = { ...store.gameState };
+
+      //clear all players who might have this socket
+      state.players = state.players.map((player) =>
+        player.socketId == newPlayer.socketId
+          ? {
+              ...player,
+              socketId: null,
+            }
+          : player
+      );
+
       //check to see if the player with this name is already in the players, if they are, then update the socket number
       var existingPlayerIndex = state.players.findIndex(
         (player) => player.displayName == newPlayer.displayName
@@ -71,10 +85,13 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       }
       return { gameState: state };
     }),
-  increasePoints: (by) =>
+  permanentlyDeletePlayer: (playerToRemove: IPlayer) =>
     set((store) => {
       const state = { ...store.gameState };
-      state.points += by;
+      state.players = state.players.filter(
+        (player) => !(player.displayName == playerToRemove.displayName)
+      );
+
       return { gameState: state };
     }),
   openBuzzer: () =>
@@ -90,9 +107,17 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       };
     }),
   closeBuzzer: () =>
-    set((store) => ({
-      gameState: { ...store.gameState, buzzerState: BuzzerState.CLOSED },
-    })),
+    set((store) => {
+      const currentTurnData = { ...store.gameState.currentTurnData };
+      currentTurnData.turnState = TurnState.READING;
+      return {
+        gameState: {
+          ...store.gameState,
+          buzzerState: BuzzerState.CLOSED,
+          currentTurnData,
+        },
+      };
+    }),
 
   //todo, I can manipulate the sort here to give an advantage to certain players
   addBuzzToHistory: (buzzData: IBuzzerSubmitData) =>
@@ -117,9 +142,21 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
           currentTurnData: {
             question: null,
             buzzHistory: [],
-            answerHistory: [],
-            answerTimeLeft: 5,
+            answerStack: [],
+            questionTimeLeft: 10,
             turnState: TurnState.CHOOSING,
+          },
+        },
+      };
+    }),
+  resolveQuestion: () =>
+    set((store) => {
+      return {
+        gameState: {
+          ...store.gameState,
+          currentTurnData: {
+            ...store.gameState.currentTurnData,
+            turnState: TurnState.RESOLVED,
           },
         },
       };
@@ -133,8 +170,22 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
         currentTurnData: {
           question: null,
           buzzHistory: [],
-          answerHistory: [],
-          answerTimeLeft: 5,
+          answerStack: [],
+          questionTimeLeft: 10,
+          turnState: TurnState.CHOOSING,
+        },
+      },
+    })),
+  resetCurrentQuestion: () =>
+    set((store) => ({
+      gameState: {
+        ...store.gameState,
+        buzzerState: BuzzerState.CLOSED,
+        currentTurnData: {
+          question: null,
+          buzzHistory: [],
+          answerStack: [],
+          questionTimeLeft: 10,
           turnState: TurnState.CHOOSING,
         },
       },
@@ -143,11 +194,17 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
     set((store) => {
       //todo add points to a leaderboard
       const currentTurnData = store.gameState.currentTurnData;
-      currentTurnData.answerHistory.push({
-        result: AnswerResult.CORRECT,
-        player,
-      });
+      currentTurnData.answerStack = currentTurnData.answerStack.map((answer) =>
+        answer.player.displayName == player.displayName
+          ? {
+              ...answer,
+              result: AnswerResult.CORRECT,
+            }
+          : answer
+      );
+
       currentTurnData.turnState = TurnState.RESOLVED;
+      currentTurnData.buzzHistory = [];
       return {
         gameState: {
           ...store.gameState,
@@ -158,25 +215,30 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
     }),
   AwardPlayerIncorrectAnswer: (player: IPlayer) =>
     set((store) => {
+      //don't open the buzzer here. Do that in a separate mutation
       const currentTurnData = { ...store.gameState.currentTurnData };
-      currentTurnData.answerHistory.push({
-        result: AnswerResult.INCORRECT,
-        player,
-      });
-      currentTurnData.turnState = TurnState.OPEN;
+      currentTurnData.answerStack = currentTurnData.answerStack.map((answer) =>
+        answer.player.displayName == player.displayName
+          ? {
+              ...answer,
+              result: AnswerResult.INCORRECT,
+            }
+          : answer
+      );
       currentTurnData.buzzHistory = [];
       return {
         gameState: {
           ...store.gameState,
-          buzzerState: BuzzerState.OPEN,
           currentTurnData,
         },
       };
     }),
-  SetTimeLeftToAnswer: (timeLeft: number) =>
+  SetTimeLeftForPlayerToAnswer: (timeLeft: number) =>
     set((store) => {
       const currentTurnData = { ...store.gameState.currentTurnData };
-      currentTurnData.answerTimeLeft = timeLeft;
+      if (currentTurnData.answerStack.length > 0) {
+        currentTurnData.answerStack[0].answerTimeLeft = timeLeft;
+      }
       return {
         gameState: {
           ...store.gameState,
@@ -185,10 +247,26 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
         },
       };
     }),
-  givePlayerChanceToAnswer: () =>
+  SetTimeLeftForAllPlayersToAnswer: (timeLeft: number) =>
+    set((store) => {
+      const currentTurnData = { ...store.gameState.currentTurnData };
+      currentTurnData.questionTimeLeft = timeLeft;
+      return {
+        gameState: {
+          ...store.gameState,
+          currentTurnData,
+        },
+      };
+    }),
+  givePlayerChanceToAnswer: (player: IPlayer) =>
     set((store) => {
       const currentTurnData = { ...store.gameState.currentTurnData };
       currentTurnData.turnState = TurnState.ANSWER;
+      currentTurnData.answerStack.unshift({
+        player,
+        answerTimeLeft: 10,
+        result: null,
+      });
       return {
         gameState: {
           ...store.gameState,

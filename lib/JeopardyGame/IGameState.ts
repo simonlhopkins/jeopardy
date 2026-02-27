@@ -4,7 +4,6 @@ import IPlayer from "./IPlayer";
 import IQuestion from "./IQuestion";
 
 export interface IGameState {
-  points: number;
   questions: IQuestion[][];
   currentTurnData: IGameTurn;
   history: IGameTurn[];
@@ -25,15 +24,14 @@ export enum BuzzerState {
 
 export function DefaultGameState(): IGameState {
   return {
-    points: 0,
     players: [],
     questions: [],
     history: [],
     currentTurnData: {
       question: null,
-      answerHistory: [],
+      answerStack: [],
       buzzHistory: [],
-      answerTimeLeft: 5,
+      questionTimeLeft: 5,
       turnState: TurnState.CHOOSING,
     },
     buzzerState: BuzzerState.CLOSED,

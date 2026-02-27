@@ -3,4 +3,5 @@ export default interface IQuestion {
   question: string;
   answer: string;
   score: number;
+  isDailyDouble: boolean;
 }

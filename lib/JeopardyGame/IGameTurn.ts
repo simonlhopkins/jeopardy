@@ -4,14 +4,15 @@ import IQuestion from "./IQuestion";
 
 export default interface IGameTurn {
   question: IQuestion | null;
-  answerHistory: IAnswerData[];
+  answerStack: IAnswerAttempt[];
   buzzHistory: IBuzzerSubmitData[];
-  answerTimeLeft: number;
   turnState: TurnState;
+  questionTimeLeft: number;
 }
 
-export interface IAnswerData {
-  result: AnswerResult;
+export interface IAnswerAttempt {
+  result: AnswerResult | null;
+  answerTimeLeft: number;
   player: IPlayer;
 }
 

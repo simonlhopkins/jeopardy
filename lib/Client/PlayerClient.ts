@@ -28,7 +28,6 @@ export default class PlayerClient {
   }
 
   public JoinGame(username: string) {
-    console.log(username);
     this.socket.emit("joinGame", {
       username,
       socketId: this.socket.id,

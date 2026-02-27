@@ -19,14 +19,15 @@ export default function JeopardyBoard({ gameState, onQuestionClick }: Props) {
               (item) => item.question?.id == question.id
             ) && "text-red-500",
             question.id == gameState.currentTurnData.question?.id &&
-              "text-green-500"
+              "text-green-500",
+            question.isDailyDouble && "border-yellow-300!"
           )}
           key={i}
           onClick={() => {
             onQuestionClick(question);
           }}
         >
-          {JSON.stringify(question, null, 2)}
+          <p className={clsx("text-xs")}>{JSON.stringify(question, null, 2)}</p>
         </div>
       ))}
     </div>

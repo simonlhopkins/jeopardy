@@ -3,15 +3,23 @@
 import HostClient from "@/lib/Client/HostClient";
 import { socket } from "@/lib/socket";
 import { useClientGameStore } from "@/lib/store/clientStore";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import JeopardyBoard from "../Components/JeopardyBoard";
 import clsx from "clsx";
-import { AnswerResult } from "@/lib/JeopardyGame/IGameTurn";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
+import PlayerStatusArea from "./PlayerStatusArea";
+import QuestionStatusArea from "./QuestionStatusArea";
+import { useStoreWithEqualityFn } from "zustand/traditional";
+import deepEqual from "fast-deep-equal";
 
 export default function Host() {
   const hostClient = useRef<HostClient | null>(null);
-  const gameState = useClientGameStore((store) => store.gameState);
+  // const gameState = useClientGameStore((store) => store.gameState);
+  const gameState = useStoreWithEqualityFn(
+    useClientGameStore,
+    (state) => state.gameState,
+    deepEqual
+  );
   const getHostClient = () => {
     if (hostClient.current == null) {
       hostClient.current = new HostClient(socket);
@@ -33,121 +41,99 @@ export default function Host() {
   }, []);
   return (
     <div>
-      <p>host</p>
-      <p className="text-xl">
-        state -{" "}
-        {GameUtil.GetTurnStateNameFromEnum(gameState.currentTurnData.turnState)}
-      </p>
-      <ul>
-        {gameState.players.map((player, i) => (
-          <li key={i}>
-            <p>
-              {player.displayName}[{player.socketId || "disconnected"}]
-            </p>
-            <button
-              className="btn"
-              onClick={() => {
-                getHostClient().KickPlayer(player);
+      <div>
+        <table className="text-xl table-fixed">
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              style={{
+                background: ` linear-gradient(
+                                to right,
+                                red ${
+                                  (gameState.currentTurnData.questionTimeLeft /
+                                    10) *
+                                  100
+                                }%,
+                                transparent ${
+                                  (gameState.currentTurnData.questionTimeLeft /
+                                    10) *
+                                  100
+                                }%
+                              )`,
               }}
             >
-              kick
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      <div className="w-[500px] h-[500px]">
-        <JeopardyBoard
-          gameState={gameState}
-          onQuestionClick={(question) => {
-            getHostClient().SetCurrentQuestion(question);
-          }}
-        />
+              <td>
+                {gameState.currentTurnData.question?.question ?? "\u00A0"}
+              </td>
+              <td>{gameState.currentTurnData.question?.answer ?? "\u00A0"}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <button
-        className="btn"
-        onClick={() => {
-          getHostClient().OpenBuzzer();
-        }}
-      >
-        Open Buzzer
-      </button>
-      <button
-        className="btn"
-        onClick={() => {
-          getHostClient().CloseBuzzer();
-        }}
-      >
-        Close Buzzer
-      </button>
-      <br />
-      <button
-        className="btn"
-        onClick={() => {
-          getHostClient().NextQuestion();
-        }}
-      >
-        Next Question
-      </button>
-      <button
-        className="btn"
-        onClick={() => {
-          getHostClient().ResetGame();
-        }}
-      >
-        Reset Game
-      </button>
-      <h3>buzz history</h3>
-      <ul>
-        {gameState.currentTurnData.buzzHistory.map((item, i) => (
-          <li key={i}>
-            <p>
-              {item.player.displayName} - {item.timestamp}
-            </p>
-            <div>
-              <button
-                className="btn"
-                onClick={() => {
-                  getHostClient().AwardPlayerCorrectAnswer(item.player);
-                }}
-              >
-                Correct
-              </button>
-              <button
-                className="btn"
-                onClick={() => {
-                  getHostClient().AwardPlayerIncorrectAnswer(item.player);
-                }}
-              >
-                Incorrect
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <h3>answer state</h3>
-      <ul>
-        {gameState.players.map((player, i) => (
-          <li key={i}>
-            <p
-              className={clsx(
-                gameState.currentTurnData.answerHistory
-                  .filter((answer) => answer.result == AnswerResult.CORRECT) //only correct answers
-                  .some(
-                    (answer) => answer.player.displayName == player.displayName //does this player have a correct answer
-                  ) && "text-green-500",
-                gameState.currentTurnData.answerHistory
-                  .filter((answer) => answer.result == AnswerResult.INCORRECT) //only correct answers
-                  .some(
-                    (answer) => answer.player.displayName == player.displayName //does this player have a correct answer
-                  ) && "text-red-500"
-              )}
-            >
-              {player.displayName}[{player.socketId || "disconnected"}]
-            </p>
-          </li>
-        ))}
-      </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        <div className="overflow-hidden">
+          <JeopardyBoard
+            gameState={gameState}
+            onQuestionClick={(question) => {
+              getHostClient().SetCurrentQuestion(question);
+            }}
+          />
+        </div>
+        <div>
+          <p className="text-xl">
+            {`state: ${GameUtil.GetTurnStateNameFromEnum(
+              gameState.currentTurnData.turnState
+            )}`}
+          </p>
+          <PlayerStatusArea getHostClient={getHostClient} />
+          <button
+            onClick={() => {
+              getHostClient().OpenBuzzer();
+            }}
+          >
+            Open Buzzer
+          </button>
+          <button
+            className="btn"
+            onClick={() => {
+              getHostClient().CloseBuzzer();
+            }}
+          >
+            Close Buzzer
+          </button>
+          <br />
+          <button
+            className="btn"
+            onClick={() => {
+              getHostClient().NextQuestion();
+            }}
+          >
+            Next Question
+          </button>
+          <button
+            className="btn"
+            onClick={() => {
+              getHostClient().ResetCurrentQuestion();
+            }}
+          >
+            Reset Question
+          </button>
+          <button
+            className="btn"
+            onClick={() => {
+              getHostClient().ResetGame();
+            }}
+          >
+            Reset Game
+          </button>
+          <QuestionStatusArea getHostClient={getHostClient} />
+        </div>
+      </div>
     </div>
   );
 }
