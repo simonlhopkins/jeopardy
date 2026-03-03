@@ -37,4 +37,7 @@ export default class PlayerClient {
   public SubmitBuzz() {
     this.socket.emit("player-submit-buzz", Date.now());
   }
+  public PlaceWager(amount: number) {
+    this.socket.emit("player-place-wager", amount);
+  }
 }

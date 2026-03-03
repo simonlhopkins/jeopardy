@@ -2,19 +2,11 @@
   "players": [
     {
       "displayName": "kendra",
-      "socketId": "IgHRTgN7u_b_NcaxAAAK"
-    },
-    {
-      "displayName": "eric",
-      "socketId": "MUtXrcnmDv0rivS_AAAS"
+      "socketId": "vmGQQnfQmTqIV1v1AAAB"
     },
     {
       "displayName": "simon",
-      "socketId": "eiKhPBzJDq0iK0EdAAAQ"
-    },
-    {
-      "displayName": "Simon’s iphone",
-      "socketId": null
+      "socketId": "SPEqn-i2DQwXLEAIAAAH"
     }
   ],
   "questions": [
@@ -92,7 +84,7 @@
         "id": 13
       },
       {
-        "isDailyDouble": false,
+        "isDailyDouble": true,
         "question": "what was the last thing you said?",
         "answer": "answer",
         "score": 200,
@@ -108,7 +100,7 @@
     ],
     [
       {
-        "isDailyDouble": false,
+        "isDailyDouble": true,
         "question": "what was the last thing you said?",
         "answer": "answer",
         "score": 300,
@@ -136,7 +128,7 @@
         "id": 18
       },
       {
-        "isDailyDouble": true,
+        "isDailyDouble": false,
         "question": "what was the last thing you said?",
         "answer": "answer",
         "score": 300,
@@ -180,7 +172,7 @@
         "id": 24
       },
       {
-        "isDailyDouble": true,
+        "isDailyDouble": false,
         "question": "what was the last thing you said?",
         "answer": "answer",
         "score": 400,
@@ -239,104 +231,9 @@
       }
     ]
   ],
-  "history": [
-    {
-      "question": {
-        "isDailyDouble": true,
-        "question": "what was the last thing you said?",
-        "answer": "answer",
-        "score": 300,
-        "id": 25
-      },
-      "buzzHistory": [],
-      "answerStack": [
-        {
-          "player": {
-            "displayName": "simon",
-            "socketId": "0Q-B9ffA1yTKYVCNAAAN"
-          },
-          "answerTimeLeft": 0,
-          "result": 0
-        }
-      ],
-      "questionTimeLeft": 6,
-      "turnState": 4
-    },
-    {
-      "question": null,
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 10,
-      "turnState": 0
-    },
-    {
-      "question": {
-        "isDailyDouble": false,
-        "question": "what was the last thing you said?",
-        "answer": "answer",
-        "score": 200,
-        "id": 19
-      },
-      "buzzHistory": [],
-      "answerStack": [
-        {
-          "player": {
-            "displayName": "Simon’s iphone",
-            "socketId": "ym-i7AZhiiFOqePeAAAV"
-          },
-          "answerTimeLeft": 0,
-          "result": 0
-        }
-      ],
-      "questionTimeLeft": 6,
-      "turnState": 4
-    },
-    {
-      "question": {
-        "isDailyDouble": false,
-        "question": "what was the last thing you said?",
-        "answer": "answer",
-        "score": 200,
-        "id": 13
-      },
-      "buzzHistory": [],
-      "answerStack": [
-        {
-          "player": {
-            "displayName": "Simon’s iphone",
-            "socketId": "giSDdT3sYxSCOeHCAAAG"
-          },
-          "answerTimeLeft": 4,
-          "result": 0
-        }
-      ],
-      "questionTimeLeft": 4,
-      "turnState": 4
-    },
-    {
-      "question": {
-        "isDailyDouble": false,
-        "question": "what was the last thing you said?",
-        "answer": "answer",
-        "score": 300,
-        "id": 33
-      },
-      "buzzHistory": [],
-      "answerStack": [
-        {
-          "player": {
-            "displayName": "kendra",
-            "socketId": "i522MHvfH4MVHEYlAAAI"
-          },
-          "answerTimeLeft": 1,
-          "result": 0
-        }
-      ],
-      "questionTimeLeft": 0,
-      "turnState": 4
-    }
-  ],
+  "history": [],
   "currentTurnData": {
+    "buzzerOpen": false,
     "question": {
       "isDailyDouble": false,
       "question": "what was the last thing you said?",
@@ -344,42 +241,28 @@
       "score": 200,
       "id": 26
     },
-    "buzzHistory": [
-      {
-        "timestamp": 1772222138961,
-        "player": {
-          "displayName": "eric",
-          "socketId": "MUtXrcnmDv0rivS_AAAS"
-        }
-      },
-      {
-        "timestamp": 1772222140761,
-        "player": {
-          "displayName": "kendra",
-          "socketId": "IgHRTgN7u_b_NcaxAAAK"
-        }
-      }
-    ],
     "answerStack": [
       {
         "player": {
           "displayName": "kendra",
-          "socketId": "IgHRTgN7u_b_NcaxAAAK"
+          "socketId": "vmGQQnfQmTqIV1v1AAAB"
         },
-        "answerTimeLeft": 0,
-        "result": null
+        "answerTimeLeft": 8,
+        "result": 1,
+        "wager": null
       },
       {
         "player": {
           "displayName": "simon",
-          "socketId": "ipaxJen8ZRm9IqD7AAAN"
+          "socketId": "SPEqn-i2DQwXLEAIAAAH"
         },
-        "answerTimeLeft": 0,
-        "result": 1
+        "answerTimeLeft": 6,
+        "result": 1,
+        "wager": null
       }
     ],
-    "questionTimeLeft": 1,
-    "turnState": 3
-  },
-  "buzzerState": 1
+    "buzzHistory": [],
+    "questionTimeLeft": 5,
+    "turnState": 4
+  }
 }

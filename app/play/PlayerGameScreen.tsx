@@ -3,6 +3,9 @@ import { IGameState } from "@/lib/JeopardyGame/IGameState";
 import { AnswerResult, TurnState } from "@/lib/JeopardyGame/IGameTurn";
 import BuzzerScreen from "./GameScreens/BuzzerScreen";
 import { useClientGameStore } from "@/lib/store/clientStore";
+import GameUtil from "@/lib/JeopardyGame/GameUtil";
+import DisplayQuestionScreen from "./GameScreens/DisplayQuestionScreen";
+import AnswerScreen from "./GameScreens/AnswerScreen";
 
 interface Props {
   gameState: IGameState;
@@ -13,48 +16,39 @@ export default function PlayerGameScreen({
   gameState,
   getPlayerClient,
 }: Props) {
-  const username = useClientGameStore((store) => store.username);
-
-  const isCurrentlyAnswering =
-    gameState.currentTurnData.answerStack.length > 0 &&
-    gameState.currentTurnData.answerStack[0].player.displayName == username &&
-    gameState.currentTurnData.answerStack[0].result == null;
-
   const currentWinners = gameState.currentTurnData.answerStack
     .filter((answer) => answer.result == AnswerResult.CORRECT)
     .map((answer) => answer.player);
+
   switch (gameState.currentTurnData.turnState) {
     case TurnState.CHOOSING:
-      return <div></div>;
-    case TurnState.READING:
       return (
         <div>
-          {gameState.currentTurnData.question
-            ? gameState.currentTurnData.question.question
-            : "no question selected during READING state?"}
+          {`${
+            GameUtil.GetPersonWhoShouldBeChoosingQuestion(
+              gameState.history,
+              gameState.players
+            )?.displayName
+          } is choosing a question`}
         </div>
+      );
+    case TurnState.READING:
+      return gameState.currentTurnData.question ? (
+        <DisplayQuestionScreen
+          question={gameState.currentTurnData.question}
+          gameState={gameState}
+          getPlayerClient={getPlayerClient}
+        />
+      ) : (
+        <p>"no question selected during READING state?"</p>
       );
     case TurnState.OPEN:
       return (
         <BuzzerScreen gameState={gameState} getPlayerClient={getPlayerClient} />
       );
+
     case TurnState.ANSWER:
-      return (
-        <div>
-          {isCurrentlyAnswering ? (
-            <p>
-              you're answering!!! you have{" "}
-              {gameState.currentTurnData.answerStack[0].answerTimeLeft} seconds
-              left
-            </p>
-          ) : (
-            <p>
-              {gameState.currentTurnData.answerStack[0].player.displayName} is
-              answering
-            </p>
-          )}
-        </div>
-      );
+      return <AnswerScreen gameState={gameState} />;
     case TurnState.RESOLVED:
       return (
         <div>

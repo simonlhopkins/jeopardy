@@ -11,10 +11,10 @@ import PlayerStatusArea from "./PlayerStatusArea";
 import QuestionStatusArea from "./QuestionStatusArea";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import deepEqual from "fast-deep-equal";
+import { TurnState } from "@/lib/JeopardyGame/IGameTurn";
 
 export default function Host() {
   const hostClient = useRef<HostClient | null>(null);
-  // const gameState = useClientGameStore((store) => store.gameState);
   const gameState = useStoreWithEqualityFn(
     useClientGameStore,
     (state) => state.gameState,
@@ -88,6 +88,8 @@ export default function Host() {
           <p className="text-xl">
             {`state: ${GameUtil.GetTurnStateNameFromEnum(
               gameState.currentTurnData.turnState
+            )} computed: ${GameUtil.GetTurnStateNameFromEnum(
+              GameUtil.GetTurnState(gameState)
             )}`}
           </p>
           <PlayerStatusArea getHostClient={getHostClient} />
@@ -99,16 +101,7 @@ export default function Host() {
             Open Buzzer
           </button>
           <button
-            className="btn"
-            onClick={() => {
-              getHostClient().CloseBuzzer();
-            }}
-          >
-            Close Buzzer
-          </button>
-          <br />
-          <button
-            className="btn"
+            disabled={gameState.currentTurnData.turnState != TurnState.RESOLVED}
             onClick={() => {
               getHostClient().NextQuestion();
             }}
@@ -116,7 +109,6 @@ export default function Host() {
             Next Question
           </button>
           <button
-            className="btn"
             onClick={() => {
               getHostClient().ResetCurrentQuestion();
             }}
@@ -124,7 +116,6 @@ export default function Host() {
             Reset Question
           </button>
           <button
-            className="btn"
             onClick={() => {
               getHostClient().ResetGame();
             }}

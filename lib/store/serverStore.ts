@@ -1,11 +1,7 @@
 "use server";
 // server/gameStore.ts
 import { create } from "zustand";
-import {
-  BuzzerState,
-  DefaultGameState,
-  IGameState,
-} from "../JeopardyGame/IGameState";
+import { DefaultGameState, IGameState } from "../JeopardyGame/IGameState";
 import IPlayer from "../JeopardyGame/IPlayer";
 import IQuestion from "../JeopardyGame/IQuestion";
 import IBuzzerSubmitData from "../JeopardyGame/IBuzzerSubmitData";
@@ -21,6 +17,7 @@ interface ServerStore {
   openBuzzer: () => void;
   closeBuzzer: () => void;
   addBuzzToHistory: (buzzData: IBuzzerSubmitData) => void;
+  placeWager: (fromPlayer: IPlayer, amount: number) => void;
   nextQuestion: () => void;
   resolveQuestion: () => void;
   resetGame: () => void;
@@ -29,7 +26,7 @@ interface ServerStore {
   AwardPlayerIncorrectAnswer: (player: IPlayer) => void;
   SetTimeLeftForPlayerToAnswer: (secondsLeft: number) => void;
   SetTimeLeftForAllPlayersToAnswer: (secondsLeft: number) => void;
-  givePlayerChanceToAnswer: (player: IPlayer) => void;
+  GivePlayerChanceToAnswer: (player: IPlayer) => void;
 }
 
 export const useServerGameStore = create<ServerStore>((set, get) => ({
@@ -98,10 +95,10 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
     set((store) => {
       const currentTurnData = { ...store.gameState.currentTurnData };
       currentTurnData.turnState = TurnState.OPEN;
+      currentTurnData.buzzerOpen = true;
       return {
         gameState: {
           ...store.gameState,
-          buzzerState: BuzzerState.OPEN,
           currentTurnData,
         },
       };
@@ -110,10 +107,10 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
     set((store) => {
       const currentTurnData = { ...store.gameState.currentTurnData };
       currentTurnData.turnState = TurnState.READING;
+      currentTurnData.buzzerOpen = false;
       return {
         gameState: {
           ...store.gameState,
-          buzzerState: BuzzerState.CLOSED,
           currentTurnData,
         },
       };
@@ -129,6 +126,20 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
         gameState: { ...store.gameState, currentTurnData },
       };
     }),
+  placeWager: (fromPlayer: IPlayer, amount: number) =>
+    set((store) => {
+      const currentTurnData = { ...store.gameState.currentTurnData };
+      currentTurnData.answerStack.unshift({
+        answerTimeLeft: 10,
+        player: fromPlayer,
+        wager: amount,
+        result: null,
+      });
+      currentTurnData.turnState = TurnState.ANSWER;
+      return {
+        gameState: { ...store.gameState, currentTurnData },
+      };
+    }),
   nextQuestion: () =>
     set((store) => {
       const newHistory = [
@@ -140,6 +151,7 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
           ...store.gameState,
           history: newHistory,
           currentTurnData: {
+            buzzerOpen: false,
             question: null,
             buzzHistory: [],
             answerStack: [],
@@ -166,8 +178,8 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       gameState: {
         ...store.gameState,
         history: [],
-        buzzerState: BuzzerState.CLOSED,
         currentTurnData: {
+          buzzerOpen: false,
           question: null,
           buzzHistory: [],
           answerStack: [],
@@ -180,8 +192,8 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
     set((store) => ({
       gameState: {
         ...store.gameState,
-        buzzerState: BuzzerState.CLOSED,
         currentTurnData: {
+          buzzerOpen: false,
           question: null,
           buzzHistory: [],
           answerStack: [],
@@ -208,7 +220,6 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       return {
         gameState: {
           ...store.gameState,
-          buzzerState: BuzzerState.CLOSED,
           currentTurnData,
         },
       };
@@ -242,7 +253,6 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       return {
         gameState: {
           ...store.gameState,
-          buzzerState: BuzzerState.CLOSED,
           currentTurnData,
         },
       };
@@ -258,19 +268,20 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
         },
       };
     }),
-  givePlayerChanceToAnswer: (player: IPlayer) =>
+  GivePlayerChanceToAnswer: (player: IPlayer) =>
     set((store) => {
       const currentTurnData = { ...store.gameState.currentTurnData };
       currentTurnData.turnState = TurnState.ANSWER;
+      currentTurnData.buzzerOpen = false;
       currentTurnData.answerStack.unshift({
         player,
         answerTimeLeft: 10,
         result: null,
+        wager: null,
       });
       return {
         gameState: {
           ...store.gameState,
-          buzzerState: BuzzerState.CLOSED,
           currentTurnData,
         },
       };

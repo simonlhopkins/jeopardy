@@ -8,7 +8,6 @@ export interface IGameState {
   currentTurnData: IGameTurn;
   history: IGameTurn[];
   players: IPlayer[];
-  buzzerState: BuzzerState;
 }
 
 export enum GamePhase {
@@ -28,12 +27,12 @@ export function DefaultGameState(): IGameState {
     questions: [],
     history: [],
     currentTurnData: {
+      buzzerOpen: false,
       question: null,
       answerStack: [],
       buzzHistory: [],
       questionTimeLeft: 5,
       turnState: TurnState.CHOOSING,
     },
-    buzzerState: BuzzerState.CLOSED,
   };
 }

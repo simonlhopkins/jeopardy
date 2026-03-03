@@ -1,6 +1,7 @@
 import HostClient from "@/lib/Client/HostClient";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import { useDeepEqualGameStore } from "@/lib/store/clientStore";
+import clsx from "clsx";
 import { useMemo } from "react";
 
 interface Props {
@@ -27,6 +28,10 @@ export default function PlayerStatusArea({ getHostClient }: Props) {
     return scoreMap;
   }, [history, players]);
 
+  const playerWhoShouldBeChoosingQuestion = useMemo(() => {
+    return GameUtil.GetPersonWhoShouldBeChoosingQuestion(history, players);
+  }, [history, players]);
+
   //then add the current turn score to it
   const currentScores = new Map<string, number>();
   for (const [key, value] of historicalScores) {
@@ -35,7 +40,6 @@ export default function PlayerStatusArea({ getHostClient }: Props) {
       value + GameUtil.GetPlayerScore(key, [currentTurnData])
     );
   }
-
   return (
     <div>
       <table>
@@ -52,7 +56,13 @@ export default function PlayerStatusArea({ getHostClient }: Props) {
         </thead>
         <tbody>
           {players.map((player, i) => (
-            <tr key={i}>
+            <tr
+              key={i}
+              className={clsx(
+                playerWhoShouldBeChoosingQuestion?.displayName ==
+                  player.displayName && "text-blue-500"
+              )}
+            >
               <td>{player.displayName}</td>
               <td>{player.socketId}</td>
               <td>

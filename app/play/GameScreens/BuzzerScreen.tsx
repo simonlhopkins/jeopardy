@@ -1,6 +1,6 @@
 import PlayerClient from "@/lib/Client/PlayerClient";
 import { BuzzerState, IGameState } from "@/lib/JeopardyGame/IGameState";
-import { AnswerResult } from "@/lib/JeopardyGame/IGameTurn";
+import { AnswerResult, TurnState } from "@/lib/JeopardyGame/IGameTurn";
 import { useClientGameStore } from "@/lib/store/clientStore";
 import { clsx } from "clsx";
 
@@ -12,7 +12,7 @@ export default function BuzzerScreen({ gameState, getPlayerClient }: Props) {
   const username = useClientGameStore((store) => store.username);
 
   const disableBuzzButton =
-    gameState.buzzerState != BuzzerState.OPEN ||
+    gameState.currentTurnData.turnState != TurnState.OPEN ||
     gameState.currentTurnData.answerStack
       .filter((answer) => answer.result == AnswerResult.INCORRECT)
       .some((answer) => answer.player.displayName == username) ||

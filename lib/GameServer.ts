@@ -92,6 +92,7 @@ export default class GameServer {
           return;
         }
         this.OpenBuzzer();
+
         this.updateAllClientState();
       });
       socket.on("host-close-buzzer", () => {
@@ -156,7 +157,7 @@ export default class GameServer {
                   this.getGameState().currentTurnData.buzzHistory.length - 1
                 ].player;
               this.ClearAnswerCountdownTimeout();
-              this.getServerStore().givePlayerChanceToAnswer(player);
+              this.getServerStore().GivePlayerChanceToAnswer(player);
               var seconds = 10;
               const decrementSeconds = () => {
                 this.getServerStore().SetTimeLeftForPlayerToAnswer(seconds);
@@ -185,6 +186,16 @@ export default class GameServer {
         // this.updateAllClientState();
       });
 
+      socket.on("player-place-wager", (amount: number) => {
+        const fromPlayer = this.getPlayerBySocketId(socket.id);
+        if (fromPlayer) {
+          this.getServerStore().placeWager(fromPlayer, amount);
+          this.updateAllClientState();
+        } else {
+          console.error("trying to place a wager from an invalid player");
+        }
+      });
+
       socket.on("host-next-question", () => {
         this.getServerStore().nextQuestion();
         this.updateAllClientState();
@@ -200,20 +211,25 @@ export default class GameServer {
       });
       socket.on("host-award-player-incorrect-answer", (player: IPlayer) => {
         this.getServerStore().AwardPlayerIncorrectAnswer(player);
-        const playersWhoHaveAnswered =
-          this.getGameState().currentTurnData.answerStack.map(
-            (answer) => answer.player
-          );
-
-        if (
-          playersWhoHaveAnswered.length ==
-          GameUtil.GetAllConnectedPlayers(this.getGameState()).length
-        ) {
-          console.log("all the players have answered");
+        if (this.getGameState().currentTurnData.question?.isDailyDouble) {
           this.getServerStore().resolveQuestion();
         } else {
-          this.OpenBuzzer();
+          const playersWhoHaveAnswered =
+            this.getGameState().currentTurnData.answerStack.map(
+              (answer) => answer.player
+            );
+
+          if (
+            playersWhoHaveAnswered.length ==
+            GameUtil.GetAllConnectedPlayers(this.getGameState()).length
+          ) {
+            console.log("all the players have answered");
+            this.getServerStore().resolveQuestion();
+          } else {
+            this.OpenBuzzer();
+          }
         }
+
         this.updateAllClientState();
       });
     });

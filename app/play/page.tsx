@@ -59,12 +59,6 @@ export default function Play() {
       <p>play</p>
       <p>username: {JSON.stringify(username)}</p>
       <p>connection status: {isInGame ? "connected" : "not connected"}</p>
-      {/* {!isInGame && (
-        <PlayerConnectionScreen
-          gameState={gameState}
-          getPlayerClient={getPlayerClient}
-        />
-      )} */}
       <PlayerConnectionScreen
         gameState={gameState}
         getPlayerClient={getPlayerClient}
