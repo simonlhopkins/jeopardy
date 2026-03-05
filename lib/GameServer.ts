@@ -183,10 +183,9 @@ export default class GameServer {
                 } players`
               );
               //todo, make this a function to choose the winner, ideally it would be the top of the buzz history
-              const player =
-                this.getGameState().currentTurnData.buzzHistory[
-                  this.getGameState().currentTurnData.buzzHistory.length - 1
-                ].player;
+              const player = [
+                ...this.getGameState().currentTurnData.buzzHistory,
+              ].sort((a, b) => a.timestamp - b.timestamp)[0]!.player;
               this.getServerStore().GivePlayerChanceToAnswer(player);
               this.ClearAnswerCountdownTimeout();
               this.StartAnswerCountdown();
