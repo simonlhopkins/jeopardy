@@ -26,9 +26,9 @@ export default function Game() {
     const turnPhase = GameUtil.GetTurnPhase(gameState);
     switch (turnPhase.turnState) {
       case TurnState.CHOOSING:
-        return `${GameUtil.GetPersonWhoShouldBeChoosingQuestion(
-          gameState
-        )} is choosing the question`;
+        return `${
+          GameUtil.GetPersonWhoShouldBeChoosingQuestion(gameState)?.displayName
+        } is choosing the question`;
       case TurnState.READING:
         return turnPhase.gameTurn.question.question;
       case TurnState.OPEN:
