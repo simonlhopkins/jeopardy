@@ -1,17 +1,18 @@
 import PlayerClient from "@/lib/Client/PlayerClient";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import { IGameState } from "@/lib/JeopardyGame/IGameState";
+import { GameTurnWithQuestion } from "@/lib/JeopardyGame/IGameTurn";
 import IQuestion from "@/lib/JeopardyGame/IQuestion";
 import { useClientGameStore } from "@/lib/store/clientStore";
 
 interface Props {
-  question: IQuestion;
+  currentTurnData: GameTurnWithQuestion;
   gameState: IGameState;
   getPlayerClient(): PlayerClient;
 }
 
 export default function DisplayQuestionScreen({
-  question,
+  currentTurnData,
   gameState,
   getPlayerClient,
 }: Props) {
@@ -21,12 +22,9 @@ export default function DisplayQuestionScreen({
     gameState.currentTurnData.answerStack.length > 0 &&
     gameState.currentTurnData.answerStack[0].wager != null;
   const playerWhoShouldBeChoosingQuestion =
-    GameUtil.GetPersonWhoShouldBeChoosingQuestion(
-      gameState.history,
-      gameState.players
-    );
+    GameUtil.GetPersonWhoShouldBeChoosingQuestion(gameState);
 
-  if (question.isDailyDouble && !wagerHasBeenSet) {
+  if (currentTurnData.question.isDailyDouble && !wagerHasBeenSet) {
     if (playerWhoShouldBeChoosingQuestion?.displayName == username) {
       return (
         <div>
@@ -45,5 +43,5 @@ export default function DisplayQuestionScreen({
       );
     }
   }
-  return <p>{question.question}</p>;
+  return <p>{currentTurnData.question.question}</p>;
 }

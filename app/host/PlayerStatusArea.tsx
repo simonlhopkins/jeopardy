@@ -1,14 +1,16 @@
 import HostClient from "@/lib/Client/HostClient";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
+import { IGameState } from "@/lib/JeopardyGame/IGameState";
 import { useDeepEqualGameStore } from "@/lib/store/clientStore";
 import clsx from "clsx";
 import { useMemo } from "react";
 
 interface Props {
+  gameState: IGameState;
   getHostClient(): HostClient;
 }
 
-export default function PlayerStatusArea({ getHostClient }: Props) {
+export default function PlayerStatusArea({ getHostClient, gameState }: Props) {
   //todo, memoize scores to gamestate.history
 
   const history = useDeepEqualGameStore((state) => state.gameState.history);
@@ -17,20 +19,18 @@ export default function PlayerStatusArea({ getHostClient }: Props) {
   );
   const players = useDeepEqualGameStore((state) => state.gameState.players);
   const historicalScores = useMemo(() => {
-    console.log("recalculate scores history");
     const scoreMap = new Map<string, number>();
     for (const player of players) {
       scoreMap.set(
         player.displayName,
-        GameUtil.GetPlayerScore(player.displayName, history)
+        GameUtil.GetPlayerScore(player.displayName, gameState.history)
       );
     }
     return scoreMap;
   }, [history, players]);
 
-  const playerWhoShouldBeChoosingQuestion = useMemo(() => {
-    return GameUtil.GetPersonWhoShouldBeChoosingQuestion(history, players);
-  }, [history, players]);
+  const playerWhoShouldBeChoosingQuestion =
+    GameUtil.GetPersonWhoShouldBeChoosingQuestion(gameState);
 
   //then add the current turn score to it
   const currentScores = new Map<string, number>();

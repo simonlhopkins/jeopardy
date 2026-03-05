@@ -1,31 +1,35 @@
 import PlayerClient from "@/lib/Client/PlayerClient";
+import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import { BuzzerState, IGameState } from "@/lib/JeopardyGame/IGameState";
-import { AnswerResult, TurnState } from "@/lib/JeopardyGame/IGameTurn";
+import IGameTurn, {
+  AnswerResult,
+  TurnState,
+} from "@/lib/JeopardyGame/IGameTurn";
 import { useClientGameStore } from "@/lib/store/clientStore";
 import { clsx } from "clsx";
 
 interface Props {
-  gameState: IGameState;
+  currentTurnData: IGameTurn;
   getPlayerClient: () => PlayerClient;
 }
-export default function BuzzerScreen({ gameState, getPlayerClient }: Props) {
+export default function BuzzerScreen({
+  currentTurnData,
+  getPlayerClient,
+}: Props) {
   const username = useClientGameStore((store) => store.username);
-
   const disableBuzzButton =
-    gameState.currentTurnData.turnState != TurnState.OPEN ||
-    gameState.currentTurnData.answerStack
+    currentTurnData.buzzerState != BuzzerState.OPEN ||
+    currentTurnData.answerStack
       .filter((answer) => answer.result == AnswerResult.INCORRECT)
       .some((answer) => answer.player.displayName == username) ||
-    gameState.currentTurnData.buzzHistory.some(
+    currentTurnData.buzzHistory.some(
       (buzzData) => buzzData.player.displayName == username
     );
-
   return (
     <div>
-      <p>time left to answer: {gameState.currentTurnData.questionTimeLeft}</p>
+      <p>time left to answer: {currentTurnData.questionTimeLeft}</p>
       <button
         disabled={disableBuzzButton}
-        className={clsx("btn")}
         onClick={() => {
           getPlayerClient().SubmitBuzz();
         }}

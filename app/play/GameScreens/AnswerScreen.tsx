@@ -1,22 +1,36 @@
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import { IGameState } from "@/lib/JeopardyGame/IGameState";
+import IGameTurn, { GameTurnWithQuestion } from "@/lib/JeopardyGame/IGameTurn";
+import IQuestion from "@/lib/JeopardyGame/IQuestion";
 import { useClientGameStore } from "@/lib/store/clientStore";
+import { useEffect } from "react";
+import { WebHaptics } from "web-haptics";
 
 interface Props {
-  gameState: IGameState;
+  currentTurnData: GameTurnWithQuestion;
 }
-export default function AnswerScreen({ gameState }: Props) {
+export default function AnswerScreen({ currentTurnData }: Props) {
   const username = useClientGameStore((store) => store.username);
   const topOfAnswerStack =
-    gameState.currentTurnData.answerStack.length > 0
-      ? gameState.currentTurnData.answerStack[0]
+    currentTurnData.answerStack.length > 0
+      ? currentTurnData.answerStack[0]
       : null;
-  if (username == topOfAnswerStack?.player.displayName) {
+  const topOfAnswerStackName = topOfAnswerStack?.player.displayName ?? null;
+
+  useEffect(() => {
+    if (!topOfAnswerStackName) return;
+    const haptics = new WebHaptics();
+    haptics.setDebug(true);
+    if (username === topOfAnswerStackName) {
+      haptics.trigger("success");
+    }
+  }, [topOfAnswerStackName, username]);
+  if (username == topOfAnswerStackName) {
     return (
       <div>
         you're answering!!! you have {topOfAnswerStack?.answerTimeLeft} seconds
         left
-        <p>{gameState.currentTurnData.question?.question || "no question"}</p>
+        <p>{currentTurnData.question.question || "no question"}</p>
       </div>
     );
   } else {

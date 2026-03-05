@@ -20,6 +20,8 @@ export default function Host() {
     (state) => state.gameState,
     deepEqual
   );
+
+  const turnPhase = GameUtil.GetTurnPhase(gameState);
   const getHostClient = () => {
     if (hostClient.current == null) {
       hostClient.current = new HostClient(socket);
@@ -80,20 +82,34 @@ export default function Host() {
           <JeopardyBoard
             gameState={gameState}
             onQuestionClick={(question) => {
-              getHostClient().SetCurrentQuestion(question);
+              if (question.isDailyDouble) {
+                if (
+                  confirm(
+                    "You're about to select a daily double, do you want to reveal it?"
+                  )
+                ) {
+                  getHostClient().SetCurrentQuestion(question);
+                } else {
+                  console.log("canceled");
+                }
+              } else {
+                getHostClient().SetCurrentQuestion(question);
+              }
             }}
           />
         </div>
         <div>
           <p className="text-xl">
             {`state: ${GameUtil.GetTurnStateNameFromEnum(
-              gameState.currentTurnData.turnState
-            )} computed: ${GameUtil.GetTurnStateNameFromEnum(
-              GameUtil.GetTurnState(gameState)
-            )}`}
+              turnPhase.turnState
+            )} ${gameState.currentTurnData.buzzerState}`}
           </p>
-          <PlayerStatusArea getHostClient={getHostClient} />
+          <PlayerStatusArea
+            getHostClient={getHostClient}
+            gameState={gameState}
+          />
           <button
+            disabled={turnPhase.turnState != TurnState.READING}
             onClick={() => {
               getHostClient().OpenBuzzer();
             }}
@@ -101,7 +117,7 @@ export default function Host() {
             Open Buzzer
           </button>
           <button
-            disabled={gameState.currentTurnData.turnState != TurnState.RESOLVED}
+            disabled={turnPhase.turnState != TurnState.RESOLVED}
             onClick={() => {
               getHostClient().NextQuestion();
             }}

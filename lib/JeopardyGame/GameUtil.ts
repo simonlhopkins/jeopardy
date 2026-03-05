@@ -1,7 +1,8 @@
-import { IGameState } from "./IGameState";
+import { BuzzerState, IGameState } from "./IGameState";
 import IGameTurn, {
   AnswerResult,
   IAnswerAttempt,
+  TurnPhase,
   TurnState,
 } from "./IGameTurn";
 import IPlayer from "./IPlayer";
@@ -59,7 +60,9 @@ export default class GameUtil {
       return questionData.question?.score ?? 0;
     }
   }
-
+  public static GetAllGameTurns(gameState: IGameState) {
+    return [...gameState.history, gameState.currentTurnData];
+  }
   public static GetPlayerScore(playerId: string, turns: IGameTurn[]) {
     const questionsPlayerHasAnswered: QuestionData[] = turns.map((turn) => ({
       question: turn.question,
@@ -102,13 +105,11 @@ export default class GameUtil {
   }
 
   public static GetPersonWhoShouldBeChoosingQuestion(
-    turns: IGameTurn[],
-    players: IPlayer[]
+    gameState: IGameState
   ): IPlayer | null {
+    const turns = [...gameState.history, gameState.currentTurnData];
     for (let i = turns.length - 1; i >= 0; i--) {
       const turn = turns[i];
-      console.log(turn);
-
       const maybePlayerWithCorrectAnswer = turn.answerStack.find(
         (answer) => answer.result == AnswerResult.CORRECT
       );
@@ -117,8 +118,8 @@ export default class GameUtil {
       }
     }
     //todo, do some sort of randomness
-    if (players.length > 0) {
-      return players[0];
+    if (gameState.players.length > 0) {
+      return gameState.players[0];
     }
     return null;
   }
@@ -130,36 +131,112 @@ export default class GameUtil {
     return null;
   }
 
-  public static GetTurnState(gameState: IGameState): TurnState {
+  private static GetEligiblePlayersForQuestion(
+    question: IQuestion,
+    gameState: IGameState
+  ) {
+    if (question.isDailyDouble) {
+      const playerWhoShouldBeAnswering =
+        this.GetPersonWhoShouldBeChoosingQuestion(gameState);
+      return playerWhoShouldBeAnswering ? [playerWhoShouldBeAnswering] : [];
+    } else {
+      return this.GetAllConnectedPlayers(gameState);
+    }
+  }
+
+  public static ShouldBuzzerBeDisabled(
+    username: string,
+    gameState: IGameState
+  ) {
+    return (
+      gameState.currentTurnData.buzzerState != BuzzerState.OPEN ||
+      gameState.currentTurnData.answerStack
+        .filter((answer) => answer.result == AnswerResult.INCORRECT)
+        .some((answer) => answer.player.displayName == username) ||
+      gameState.currentTurnData.buzzHistory.some(
+        (buzzData) => buzzData.player.displayName == username
+      )
+    );
+  }
+
+  public static GetPlayersWhoAnsweredIncorrect(gameState: IGameState) {
+    return gameState.currentTurnData.answerStack
+      .filter((answer) => answer.result == AnswerResult.INCORRECT)
+      .map((answer) => answer.player);
+  }
+
+  public static GetMaxWagerAmount(playerId: string, gameState: IGameState) {
+    const playerScore = this.GetPlayerScore(playerId, [
+      ...gameState.history,
+      gameState.currentTurnData,
+    ]);
+    const maxScoreOnBoard = Math.max(
+      ...gameState.questions.flat().map((question) => question.score)
+    );
+    return Math.max(playerScore, maxScoreOnBoard);
+  }
+
+  public static GetPlayersWhoAnsweredCorrect(gameState: IGameState) {
+    return gameState.currentTurnData.answerStack
+      .filter((answer) => answer.result == AnswerResult.CORRECT)
+      .map((answer) => answer.player);
+  }
+  public static GetTurnPhase(gameState: IGameState): TurnPhase {
     const { currentTurnData } = gameState;
     if (currentTurnData.question == null) {
-      return TurnState.CHOOSING;
+      return {
+        turnState: TurnState.CHOOSING,
+        gameTurn: {
+          ...currentTurnData,
+          question: null,
+        },
+      };
     } else {
       const topAnswerIsCorrect =
         currentTurnData.answerStack.findIndex(
           (answer) => answer.result == AnswerResult.CORRECT
         ) == 0;
+
       const allPlayersAnsweredWrong =
-        this.GetAllConnectedPlayers(gameState).length ==
+        this.GetEligiblePlayersForQuestion(currentTurnData.question, gameState)
+          .length ==
         currentTurnData.answerStack.filter(
           (answer) => answer.result == AnswerResult.INCORRECT
         ).length;
       const noTimeLeft = currentTurnData.questionTimeLeft == 0;
 
       if (topAnswerIsCorrect || allPlayersAnsweredWrong || noTimeLeft) {
-        return TurnState.RESOLVED;
+        return {
+          turnState: TurnState.RESOLVED,
+          gameTurn: { ...currentTurnData, question: currentTurnData.question },
+        };
       }
       const answerIsPending =
         currentTurnData.answerStack.findIndex(
           (answer) => answer.result == null
         ) == 0;
       if (answerIsPending) {
-        return TurnState.ANSWER;
+        return {
+          turnState: TurnState.ANSWER,
+          gameTurn: { ...currentTurnData, question: currentTurnData.question },
+        };
       } else {
-        if (currentTurnData.buzzerOpen) {
-          return TurnState.OPEN;
+        if (currentTurnData.buzzerState == BuzzerState.OPEN) {
+          return {
+            turnState: TurnState.OPEN,
+            gameTurn: {
+              ...currentTurnData,
+              question: currentTurnData.question,
+            },
+          };
         } else {
-          return TurnState.READING;
+          return {
+            turnState: TurnState.READING,
+            gameTurn: {
+              ...currentTurnData,
+              question: currentTurnData.question,
+            },
+          };
         }
       }
     }

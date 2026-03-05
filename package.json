@@ -14,12 +14,14 @@
     "lodash": "^4.17.23",
     "next": "16.1.6",
     "nodemon": "^3.1.13",
+    "public-google-sheets-parser": "^1.5.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
     "ts-node": "^10.9.2",
     "use-sync-external-store": "^1.6.0",
+    "web-haptics": "^0.0.6",
     "zustand": "^5.0.11"
   },
   "devDependencies": {

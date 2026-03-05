@@ -63,19 +63,19 @@ export default function QuestionStatusArea({ getHostClient }: Props) {
               )}
             >
               <td>{answer.player.displayName}</td>
-              <td className="relative">
-                <div
-                  style={{
-                    width: `${(answer.answerTimeLeft / 10) * 100}%`,
-                  }}
-                  className={clsx(
-                    "absolute left-0 top-0 h-full",
-                    answer.result == AnswerResult.CORRECT
-                      ? "bg-green-600"
-                      : "bg-red-600"
-                  )}
-                ></div>
-                <span className="relative z-10">{answer.answerTimeLeft}</span>
+              <td
+                className="relative"
+                style={{
+                  background: ` linear-gradient(
+                                to right,
+                                red ${(answer.answerTimeLeft / 10) * 100}%,
+                                transparent ${
+                                  (answer.answerTimeLeft / 10) * 100
+                                }%
+                              )`,
+                }}
+              >
+                {answer.answerTimeLeft}
               </td>
               <td>{answer.wager ?? "none"}</td>
               <td>

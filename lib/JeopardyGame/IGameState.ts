@@ -27,12 +27,11 @@ export function DefaultGameState(): IGameState {
     questions: [],
     history: [],
     currentTurnData: {
-      buzzerOpen: false,
+      buzzerState: BuzzerState.CLOSED,
       question: null,
       answerStack: [],
       buzzHistory: [],
       questionTimeLeft: 5,
-      turnState: TurnState.CHOOSING,
     },
   };
 }

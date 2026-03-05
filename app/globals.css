@@ -3,6 +3,27 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --jeopardyBlue: #060ce9;
+  /* Core */
+  --color-primary: var(--jeopardyBlue);
+
+  /* Lighter (hover/highlight) */
+  --color-primary-hover: color-mix(in srgb, var(--jeopardyBlue) 80%, white);
+
+  /* Darker (active/pressed) */
+  --color-primary-active: color-mix(in srgb, var(--jeopardyBlue) 85%, black);
+
+  /* Disabled */
+  --color-primary-disabled: color-mix(in srgb, var(--jeopardyBlue) 40%, gray);
+
+  /* Subtle background tint */
+  --color-primary-bg-subtle: color-mix(in srgb, var(--jeopardyBlue) 15%, white);
+
+  /* Border */
+  --color-primary-border: color-mix(in srgb, var(--jeopardyBlue) 70%, black);
+
+  /* Focus ring */
+  --color-primary-focus: color-mix(in srgb, var(--jeopardyBlue) 60%, white);
 }
 
 @theme inline {
@@ -24,7 +45,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   width: 100vw;
-  overflow: scroll;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }

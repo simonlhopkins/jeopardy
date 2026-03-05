@@ -51,8 +51,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div>{socketId}</div>
-        <DebugDropdown />
         {children}
       </body>
     </html>

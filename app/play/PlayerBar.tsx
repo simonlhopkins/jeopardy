@@ -1,0 +1,106 @@
+import GameUtil from "@/lib/JeopardyGame/GameUtil";
+import { IGameState } from "@/lib/JeopardyGame/IGameState";
+import { AnswerResult, TurnState } from "@/lib/JeopardyGame/IGameTurn";
+import IPlayer from "@/lib/JeopardyGame/IPlayer";
+import clsx from "clsx";
+
+interface Props {
+  gameState: IGameState;
+  username: string;
+}
+
+export default function PlayerBar({ gameState, username }: Props) {
+  var turnPhase = GameUtil.GetTurnPhase(gameState);
+
+  function getStatusEmoji(player: IPlayer) {
+    switch (turnPhase.turnState) {
+      case TurnState.CHOOSING:
+        return GameUtil.GetPersonWhoShouldBeChoosingQuestion(gameState)
+          ?.displayName == player.displayName
+          ? "🤔"
+          : "👀";
+      case TurnState.READING:
+        return "👂";
+      case TurnState.OPEN:
+        return GameUtil.GetPlayersWhoAnsweredIncorrect(gameState).some(
+          (answeredPlayer) => answeredPlayer.displayName == player.displayName
+        )
+          ? "😡"
+          : "💭";
+      case TurnState.ANSWER:
+        return GameUtil.GetPlayerAnswering(
+          gameState.currentTurnData.answerStack
+        )?.displayName == player.displayName
+          ? "💬"
+          : "😨";
+      case TurnState.RESOLVED:
+        return GameUtil.GetPlayersWhoAnsweredCorrect(gameState)
+          .map((player) => player.displayName)
+          .includes(player.displayName)
+          ? "🎉"
+          : "😭";
+    }
+  }
+
+  return (
+    <div className="flex h-full items-center gap-2">
+      {[
+        ...GameUtil.GetAllConnectedPlayers(gameState).filter(
+          (player) => player.displayName == username
+        ),
+        ...GameUtil.GetAllConnectedPlayers(gameState)
+          .filter((player) => player.displayName != username)
+          .sort(
+            (a, b) =>
+              GameUtil.GetPlayerScore(
+                b.displayName,
+                GameUtil.GetAllGameTurns(gameState)
+              ) -
+              GameUtil.GetPlayerScore(
+                a.displayName,
+                GameUtil.GetAllGameTurns(gameState)
+              )
+          ),
+      ].map((player) => (
+        <div
+          key={player.socketId}
+          className="h-full aspect-square border-2 rounded-full flex items-center justify-center flex-col relative"
+          style={{ background: getBGStyle(player, gameState) }}
+        >
+          <div className="absolute right-0 top-0">{getStatusEmoji(player)}</div>
+          <p
+            className={clsx(
+              username == player.displayName && "font-bold",
+              GameUtil.GetPersonWhoShouldBeChoosingQuestion(gameState)
+                ?.displayName == player.displayName && "text-blue-500"
+            )}
+          >
+            {player.displayName}
+          </p>
+          <p>
+            {GameUtil.GetPlayerScore(
+              player.displayName,
+              GameUtil.GetAllGameTurns(gameState)
+            )}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function getBGStyle(player: IPlayer, gameState: IGameState) {
+  const playerAnswerAttempt = gameState.currentTurnData.answerStack.find(
+    (answer) => answer.player.displayName == player.displayName
+  );
+  if (playerAnswerAttempt) {
+    const color =
+      playerAnswerAttempt.result == AnswerResult.INCORRECT ? "red" : "green";
+    return `linear-gradient(
+        to right,
+        ${color} ${(playerAnswerAttempt.answerTimeLeft / 10) * 100}%,
+        transparent ${(playerAnswerAttempt.answerTimeLeft / 10) * 100}%
+      )`;
+  }
+  return "";
+}

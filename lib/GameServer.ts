@@ -9,6 +9,7 @@ import IBuzzerSubmitData from "./JeopardyGame/IBuzzerSubmitData";
 import IPlayer from "./JeopardyGame/IPlayer";
 import { AnswerResult, TurnState } from "./JeopardyGame/IGameTurn";
 import GameUtil from "./JeopardyGame/GameUtil";
+import PublicGoogleSheetsParser from "public-google-sheets-parser";
 
 export default class GameServer {
   private static SAVE_PATH = path.resolve(__dirname, "gameState.json");
@@ -23,10 +24,11 @@ export default class GameServer {
 
     const unsubscribe = useServerGameStore.subscribe((store, prevStore) => {
       //this is so fucking overkill
-      if (store.gameState.currentTurnData.turnState != TurnState.OPEN) {
+      const turnState = GameUtil.GetTurnPhase(store.gameState).turnState;
+      if (turnState != TurnState.OPEN) {
         this.ClearQuestionCountdownTimeout();
       }
-      if (store.gameState.currentTurnData.turnState != TurnState.ANSWER) {
+      if (turnState != TurnState.ANSWER) {
         this.ClearAnswerCountdownTimeout();
       }
     });
@@ -68,10 +70,8 @@ export default class GameServer {
 
       socket.on("host-set-current-question", (question: IQuestion) => {
         //todo maybe the validation should go here?
-        if (
-          this.getGameState().currentTurnData.turnState == TurnState.CHOOSING ||
-          this.getGameState().currentTurnData.turnState == TurnState.READING
-        ) {
+        const turnState = GameUtil.GetTurnPhase(this.getGameState()).turnState;
+        if (turnState == TurnState.CHOOSING || turnState == TurnState.READING) {
           if (this.getGameState().currentTurnData.question?.id == question.id) {
             this.getServerStore().resetCurrentQuestion();
           } else {
@@ -87,8 +87,17 @@ export default class GameServer {
       });
 
       socket.on("host-open-buzzer", () => {
-        if (this.getGameState().currentTurnData.turnState == TurnState.OPEN) {
+        const turnPhase = GameUtil.GetTurnPhase(this.getGameState());
+
+        if (turnPhase.turnState == TurnState.OPEN) {
           console.log("not opening buzzer, buzzer already open");
+          return;
+        } else if (
+          turnPhase.turnState != TurnState.CHOOSING &&
+          turnPhase.gameTurn.question.isDailyDouble
+        ) {
+          //question won't exist is choosing is true
+          console.log("you cannot open buzzers during a daily double question");
           return;
         }
         this.OpenBuzzer();
@@ -107,7 +116,8 @@ export default class GameServer {
 
       socket.on("player-submit-buzz", (timestamp) => {
         //do comparrison, set timeout, etc.
-        if (this.getGameState().currentTurnData.turnState != TurnState.OPEN) {
+        const turnState = GameUtil.GetTurnPhase(this.getGameState()).turnState;
+        if (turnState != TurnState.OPEN) {
           console.log("tried buzzing while the turn was not open, ignoring..");
           return;
         }
@@ -141,42 +151,31 @@ export default class GameServer {
           if (this.buzzBufferTimeout) {
             clearTimeout(this.buzzBufferTimeout);
           }
+
           this.buzzBufferTimeout = setTimeout(() => {
             //don't update the state to the clients until we've done the timeout nonsense
-            if (
-              this.getGameState().currentTurnData.turnState != TurnState.ANSWER
-            ) {
+            const turnState = GameUtil.GetTurnPhase(
+              this.getGameState()
+            ).turnState;
+
+            if (turnState != TurnState.ANSWER) {
               this.getServerStore().closeBuzzer();
               console.log(
                 `choosing from ${
                   this.getGameState().currentTurnData.buzzHistory.length
                 } players`
               );
+              //todo, make this a function to choose the winner, ideally it would be the top of the buzz history
               const player =
                 this.getGameState().currentTurnData.buzzHistory[
                   this.getGameState().currentTurnData.buzzHistory.length - 1
                 ].player;
-              this.ClearAnswerCountdownTimeout();
               this.getServerStore().GivePlayerChanceToAnswer(player);
-              var seconds = 10;
-              const decrementSeconds = () => {
-                this.getServerStore().SetTimeLeftForPlayerToAnswer(seconds);
-                this.updateAllClientState();
-                if (seconds == 0) {
-                  console.log("time out done");
-                  return;
-                }
-                seconds -= 1;
-                this.answerCountdownTimeout = setTimeout(
-                  decrementSeconds,
-                  1000
-                );
-              };
-              console.log("starting countdown");
-              decrementSeconds();
+              this.ClearAnswerCountdownTimeout();
+              this.StartAnswerCountdown();
             }
             this.updateAllClientState();
-          }, GameServer.BUZZ_SUBMIT_WINDOW);
+          }, Math.min(GameServer.BUZZ_SUBMIT_WINDOW, this.getGameState().currentTurnData.questionTimeLeft));
         } else {
           console.error(
             "got a buzz from a player that is not included in players"
@@ -190,6 +189,8 @@ export default class GameServer {
         const fromPlayer = this.getPlayerBySocketId(socket.id);
         if (fromPlayer) {
           this.getServerStore().placeWager(fromPlayer, amount);
+          this.ClearAnswerCountdownTimeout();
+          this.StartAnswerCountdown();
           this.updateAllClientState();
         } else {
           console.error("trying to place a wager from an invalid player");
@@ -255,12 +256,32 @@ export default class GameServer {
         this.updateAllClientState();
         return;
       }
-      if (this.getGameState().currentTurnData.turnState != TurnState.OPEN) {
+
+      if (
+        GameUtil.GetTurnPhase(this.getGameState()).turnState != TurnState.OPEN
+      ) {
         console.log("canceling timeout, no longer in open state");
       }
       seconds -= 1;
       this.questionCountdownTimeout = setTimeout(decrementSeconds, 1000);
     };
+    decrementSeconds();
+  }
+
+  private StartAnswerCountdown() {
+    this.ClearAnswerCountdownTimeout();
+    var seconds = 10;
+    const decrementSeconds = () => {
+      this.getServerStore().SetTimeLeftForPlayerToAnswer(seconds);
+      this.updateAllClientState();
+      if (seconds == 0) {
+        console.log("time out done");
+        return;
+      }
+      seconds -= 1;
+      this.answerCountdownTimeout = setTimeout(decrementSeconds, 1000);
+    };
+    console.log("starting countdown");
     decrementSeconds();
   }
 
@@ -301,7 +322,7 @@ export default class GameServer {
     fs.writeFileSync(GameServer.SAVE_PATH, JSON.stringify(state, null, 2));
   }
 
-  private loadGameFromDisc() {
+  private async loadGameFromDisc() {
     if (fs.existsSync(GameServer.SAVE_PATH)) {
       const data = fs.readFileSync(GameServer.SAVE_PATH, "utf-8");
       const parsed: IGameState = JSON.parse(data);
@@ -312,11 +333,14 @@ export default class GameServer {
         socketId: null,
       }));
       useServerGameStore.setState({ gameState: parsed });
-      if (this.getGameState().currentTurnData.turnState == TurnState.OPEN) {
+      if (
+        GameUtil.GetTurnPhase(this.getGameState()).turnState == TurnState.OPEN
+      ) {
         this.OpenBuzzer();
       }
     } else {
-      this.getServerStore().setQuestions(GameServer.CreateQuestions());
+      const questions = await GameServer.CreateQuestionsFromGoogleSheet();
+      this.getServerStore().setQuestions(questions);
     }
   }
   private static cantorPair(x: number, y: number): number {
@@ -325,6 +349,15 @@ export default class GameServer {
     }
     const sum = x + y;
     return (sum * (sum + 1)) / 2 + y;
+  }
+
+  private static shuffleArr(arr: any[]) {
+    const ret = [...arr];
+    for (let i = ret.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [ret[i], ret[j]] = [ret[j], ret[i]];
+    }
+    return ret;
   }
   private static CreateQuestions(): IQuestion[][] {
     const ret: IQuestion[][] = [];
@@ -338,8 +371,8 @@ export default class GameServer {
       for (let col = 0; col < cols; col++) {
         ret[row].push({
           isDailyDouble: false,
-          question: "what was the last thing you said?",
-          answer: "answer",
+          question: `question from row ${row}, col ${col}?`,
+          answer: `answer from row ${row}, col ${col}`,
           score: (row + 1) * 100,
           id: GameServer.cantorPair(row, col),
         });
@@ -347,13 +380,41 @@ export default class GameServer {
         dailyDoubleOptions.push({ row, col });
       }
     }
-    for (let i = dailyDoubleOptions.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [dailyDoubleOptions[i], dailyDoubleOptions[j]] = [
-        dailyDoubleOptions[j],
-        dailyDoubleOptions[i],
-      ];
+    dailyDoubleOptions = this.shuffleArr(dailyDoubleOptions);
+
+    for (let i = 0; i < 2; i++) {
+      const pos = dailyDoubleOptions[i];
+      ret[pos.row][pos.col].isDailyDouble = true;
     }
+    return ret;
+  }
+
+  private static async CreateQuestionsFromGoogleSheet(): Promise<
+    IQuestion[][]
+  > {
+    console.log("parsing...");
+    const spreadsheetId = "18r3MSbXelmld3OgPJooMGLPieWx4vaUn5Ssv6jxYx8o";
+    const parser = new PublicGoogleSheetsParser(spreadsheetId, "Sheet2");
+    const ret: IQuestion[][] = [];
+    var dailyDoubleOptions = [];
+    const parsed = (await parser.parse()).map((row) =>
+      Object.values(row)
+    ) as string[][];
+    for (let row = 0; row < 5; row++) {
+      ret.push([]);
+      for (let col = 0; col < 6; col++) {
+        const rowIndex = row * 2;
+        ret[row].push({
+          isDailyDouble: false,
+          question: parsed[rowIndex][col],
+          answer: parsed[rowIndex + 1][col],
+          score: (row + 1) * 100,
+          id: GameServer.cantorPair(row, col),
+        });
+        dailyDoubleOptions.push({ row, col });
+      }
+    }
+    dailyDoubleOptions = this.shuffleArr(dailyDoubleOptions);
 
     for (let i = 0; i < 2; i++) {
       const pos = dailyDoubleOptions[i];

@@ -9,6 +9,7 @@ import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import PlayerConnectionScreen from "./PlayerConnectionScreen";
 import PlayerGameScreen from "./PlayerGameScreen";
+import PlayerScreenV2 from "./PlayerScreenV2";
 
 export default function Play() {
   const playerClient = useRef<PlayerClient | null>(null);
@@ -55,8 +56,7 @@ export default function Play() {
   }, []);
 
   return (
-    <div>
-      <p>play</p>
+    <div className="flex-1 flex flex-col overflow-hidden">
       <p>username: {JSON.stringify(username)}</p>
       <p>connection status: {isInGame ? "connected" : "not connected"}</p>
       <PlayerConnectionScreen
@@ -64,15 +64,15 @@ export default function Play() {
         getPlayerClient={getPlayerClient}
       />
       {isInGame && (
-        <PlayerGameScreen
+        // <PlayerGameScreen
+        //   gameState={gameState}
+        //   getPlayerClient={getPlayerClient}
+        // />
+        <PlayerScreenV2
           gameState={gameState}
           getPlayerClient={getPlayerClient}
+          username={username!}
         />
-      )}
-
-      {winnerOfCurrentQuestion && <p>Congrats, you answered correctly</p>}
-      {answeredCurrentQuestionIncorrect && (
-        <p>Bummer! you answered the question incorrect</p>
       )}
     </div>
   );

@@ -1,5 +1,4 @@
 import { IGameState } from "@/lib/JeopardyGame/IGameState";
-import IGameTurn from "@/lib/JeopardyGame/IGameTurn";
 import IQuestion from "@/lib/JeopardyGame/IQuestion";
 import clsx from "clsx";
 
@@ -27,7 +26,7 @@ export default function JeopardyBoard({ gameState, onQuestionClick }: Props) {
             onQuestionClick(question);
           }}
         >
-          <p className={clsx("text-xs")}>{JSON.stringify(question, null, 2)}</p>
+          <p className={clsx("text-xs")}>{question.score}</p>
         </div>
       ))}
     </div>
