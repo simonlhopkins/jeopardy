@@ -56,7 +56,7 @@ export default function Play() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden max-w-xl">
       <p>username: {JSON.stringify(username)}</p>
       <p>connection status: {isInGame ? "connected" : "not connected"}</p>
       <PlayerConnectionScreen

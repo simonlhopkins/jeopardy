@@ -1,12 +1,24 @@
 import { IGameState } from "@/lib/JeopardyGame/IGameState";
+import IQuestion from "@/lib/JeopardyGame/IQuestion";
 import clsx from "clsx";
 
 interface Props {
   gameState: IGameState;
+  showDailyDoubles: boolean;
+  onQuestionClick: ((question: IQuestion) => void) | null;
 }
-export default function PlayerJeopardyBoard({ gameState }: Props) {
+export default function PlayerJeopardyBoard({
+  gameState,
+  onQuestionClick,
+  showDailyDoubles,
+}: Props) {
   return (
-    <div className="grid grid-rows-5 grid-cols-6 h-full gap-2">
+    <div className="grid grid-rows-[auto_repeat(5,1fr)] flex-1 grid-cols-6 gap-2">
+      {gameState.categories.map((category, i) => (
+        <div key={i}>
+          <p className="text-sm text-wrap break-all">{category}</p>
+        </div>
+      ))}
       {gameState.questions.flat().map((question, i) => (
         <div
           className={clsx(
@@ -15,8 +27,16 @@ export default function PlayerJeopardyBoard({ gameState }: Props) {
               "text-green-500",
             gameState.history.some(
               (item) => item.question?.id == question.id
-            ) && "invisible"
+            ) && "invisible",
+            showDailyDoubles && question.isDailyDouble && "border-yellow-300!"
           )}
+          onClick={
+            onQuestionClick
+              ? () => {
+                  onQuestionClick(question);
+                }
+              : undefined
+          }
           key={i}
         >
           <p className={clsx("text-xl")}>{question.score}</p>

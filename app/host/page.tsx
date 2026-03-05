@@ -5,13 +5,14 @@ import { socket } from "@/lib/socket";
 import { useClientGameStore } from "@/lib/store/clientStore";
 import { useEffect, useRef } from "react";
 import JeopardyBoard from "../Components/JeopardyBoard";
-import clsx from "clsx";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import PlayerStatusArea from "./PlayerStatusArea";
 import QuestionStatusArea from "./QuestionStatusArea";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import deepEqual from "fast-deep-equal";
 import { TurnState } from "@/lib/JeopardyGame/IGameTurn";
+import GoogleSheetForm from "./GoogleSheetForm";
+import PlayerJeopardyBoard from "../play/PlayerJeopardyBoard";
 
 export default function Host() {
   const hostClient = useRef<HostClient | null>(null);
@@ -77,10 +78,24 @@ export default function Host() {
           </tbody>
         </table>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-        <div className="overflow-hidden">
-          <JeopardyBoard
+      <div className="bg-white">
+        <GoogleSheetForm
+          onSubmit={function (data: {
+            spreadsheetName: string;
+            sheetName: string;
+          }): void {
+            getHostClient().UpdateGoogleSheet(
+              data.spreadsheetName,
+              data.sheetName
+            );
+          }}
+        />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="overflow-hidden flex flex-col">
+          <PlayerJeopardyBoard
             gameState={gameState}
+            showDailyDoubles={true}
             onQuestionClick={(question) => {
               if (question.isDailyDouble) {
                 if (

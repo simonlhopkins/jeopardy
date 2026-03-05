@@ -13,7 +13,6 @@ export default function JeopardyBoard({ gameState, onQuestionClick }: Props) {
       {gameState.questions.flat().map((question, i) => (
         <div
           className={clsx(
-            "jeopardy-square",
             gameState.history.some(
               (item) => item.question?.id == question.id
             ) && "text-red-500",

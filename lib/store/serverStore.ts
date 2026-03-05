@@ -10,10 +10,11 @@ import IPlayer from "../JeopardyGame/IPlayer";
 import IQuestion from "../JeopardyGame/IQuestion";
 import IBuzzerSubmitData from "../JeopardyGame/IBuzzerSubmitData";
 import { AnswerResult, TurnState } from "../JeopardyGame/IGameTurn";
+import { IJeopardyGameData } from "../JeopardyGame/IJeopardyGameData";
 
 interface ServerStore {
   gameState: IGameState;
-  setQuestions: (questions: IQuestion[][]) => void;
+  setQuestions: (gameData: IJeopardyGameData) => void;
   setCurrentQuestion: (question: IQuestion) => void;
   connectPlayer: (player: IPlayer) => void;
   disconnectPlayer: (socketId: string) => void;
@@ -60,10 +61,11 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       }
       return { gameState: state };
     }),
-  setQuestions: (questions: IQuestion[][]) =>
+  setQuestions: (gameData: IJeopardyGameData) =>
     set((store) => {
       const state = { ...store.gameState };
-      state.questions = questions;
+      state.questions = gameData.questions;
+      state.categories = gameData.categories;
       return { gameState: state };
     }),
   setCurrentQuestion: (question: IQuestion) =>

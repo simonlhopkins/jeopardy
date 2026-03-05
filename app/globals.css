@@ -45,7 +45,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
 }

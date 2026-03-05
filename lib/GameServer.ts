@@ -10,6 +10,7 @@ import IPlayer from "./JeopardyGame/IPlayer";
 import { AnswerResult, TurnState } from "./JeopardyGame/IGameTurn";
 import GameUtil from "./JeopardyGame/GameUtil";
 import PublicGoogleSheetsParser from "public-google-sheets-parser";
+import { IJeopardyGameData } from "./JeopardyGame/IJeopardyGameData";
 
 export default class GameServer {
   private static SAVE_PATH = path.resolve(__dirname, "gameState.json");
@@ -83,6 +84,22 @@ export default class GameServer {
           console.log(
             "cannot update the question if you're not reading a question or choosing a question"
           );
+        }
+      });
+
+      socket.on("host-update-google-sheet", async (data) => {
+        const { sheetId, sheetName } = data;
+
+        try {
+          const gameData = await GameServer.CreateQuestionsFromGoogleSheet(
+            sheetId,
+            sheetName
+          );
+          this.getServerStore().resetGame();
+          this.getServerStore().setQuestions(gameData);
+          this.updateAllClientState();
+        } catch (e) {
+          console.log(e);
         }
       });
 
@@ -326,7 +343,6 @@ export default class GameServer {
     if (fs.existsSync(GameServer.SAVE_PATH)) {
       const data = fs.readFileSync(GameServer.SAVE_PATH, "utf-8");
       const parsed: IGameState = JSON.parse(data);
-      console.log(parsed);
       //when we load the previous state from scratch, we don't want to include the socket ids since they probably don't exist anymore.
       parsed.players = parsed.players.map((player) => ({
         ...player,
@@ -339,7 +355,10 @@ export default class GameServer {
         this.OpenBuzzer();
       }
     } else {
-      const questions = await GameServer.CreateQuestionsFromGoogleSheet();
+      const questions = await GameServer.CreateQuestionsFromGoogleSheet(
+        "18r3MSbXelmld3OgPJooMGLPieWx4vaUn5Ssv6jxYx8o",
+        "Sheet2"
+      );
       this.getServerStore().setQuestions(questions);
     }
   }
@@ -389,25 +408,25 @@ export default class GameServer {
     return ret;
   }
 
-  private static async CreateQuestionsFromGoogleSheet(): Promise<
-    IQuestion[][]
-  > {
-    console.log("parsing...");
-    const spreadsheetId = "18r3MSbXelmld3OgPJooMGLPieWx4vaUn5Ssv6jxYx8o";
-    const parser = new PublicGoogleSheetsParser(spreadsheetId, "Sheet2");
+  private static async CreateQuestionsFromGoogleSheet(
+    spreadsheetId: string,
+    sheetName: string
+  ): Promise<IJeopardyGameData> {
+    console.log(spreadsheetId, sheetName);
+    const parser = new PublicGoogleSheetsParser(spreadsheetId, sheetName);
     const ret: IQuestion[][] = [];
     var dailyDoubleOptions = [];
-    const parsed = (await parser.parse()).map((row) =>
-      Object.values(row)
-    ) as string[][];
+    const parsed = await parser.parse();
+    const categories = Object.keys(parsed[0]) as string[];
+    const rawQuestions = parsed.map((row) => Object.values(row)) as string[][];
     for (let row = 0; row < 5; row++) {
       ret.push([]);
       for (let col = 0; col < 6; col++) {
         const rowIndex = row * 2;
         ret[row].push({
           isDailyDouble: false,
-          question: parsed[rowIndex][col],
-          answer: parsed[rowIndex + 1][col],
+          question: rawQuestions[rowIndex][col],
+          answer: rawQuestions[rowIndex + 1][col],
           score: (row + 1) * 100,
           id: GameServer.cantorPair(row, col),
         });
@@ -420,6 +439,9 @@ export default class GameServer {
       const pos = dailyDoubleOptions[i];
       ret[pos.row][pos.col].isDailyDouble = true;
     }
-    return ret;
+    return {
+      categories,
+      questions: ret,
+    } as IJeopardyGameData;
   }
 }

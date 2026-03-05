@@ -56,7 +56,7 @@ export default function PlayerScreenV2({
       if (turnPhase.gameTurn.question.isDailyDouble && !wagerHasBeenSet) {
         if (playerChoosing?.displayName == username) {
           statusBoxContents = (
-            <div className="flex">
+            <div className="flex gap-2 items-center">
               <input
                 type="range"
                 min="0"
@@ -64,8 +64,9 @@ export default function PlayerScreenV2({
                 value={wagerSlider}
                 onChange={(e) => setWagerSlider(Number(e.target.value))}
               />
-              <p>{wagerSlider}</p>
+              <p className="text-lg">{wagerSlider}</p>
               <button
+                className="text-black"
                 onClick={() => {
                   getPlayerClient().PlaceWager(wagerSlider);
                 }}
@@ -96,16 +97,20 @@ export default function PlayerScreenV2({
 
   return (
     <div className="grid grid-rows-8 flex-1 overflow-hidden gap-2">
-      <div className="row-start-1 row-span-1 bg-(--color-primary) overflow-x-scroll">
+      <div className="row-start-1 row-span-1 bg-(--color-primary) overflow-x-scroll p-2">
         <PlayerBar gameState={gameState} username={username} />
       </div>
-      <div className="row-start-2 row-end-3  bg-(--color-primary-bg-subtle) text-2xl text-black items-center flex">
+      <div className="row-start-2 row-end-3  bg-(--color-primary) text-sm items-center flex p-2 ">
         {statusBoxContents}
       </div>
-      <div className="row-start-3 row-end-8 bg-(--color-primary)">
-        <PlayerJeopardyBoard gameState={gameState} />
+      <div className="row-start-3 row-end-8 bg-(--color-primary) flex p-2">
+        <PlayerJeopardyBoard
+          gameState={gameState}
+          onQuestionClick={null}
+          showDailyDoubles={false}
+        />
       </div>
-      <div className="row-start-8 row-span-1  bg-blue-400">
+      <div className="row-start-8 row-span-1">
         <button
           style={{ background: buzzDisabled ? "" : getBuzzBgStyle(turnPhase) }}
           disabled={buzzDisabled}

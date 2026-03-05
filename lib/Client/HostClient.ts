@@ -53,4 +53,11 @@ export default class HostClient {
   public ResetCurrentQuestion() {
     this.socket.emit("host-reset-current-question");
   }
+
+  public UpdateGoogleSheet(sheetId: string, sheetName: string) {
+    this.socket.emit("host-update-google-sheet", {
+      sheetId,
+      sheetName,
+    });
+  }
 }
