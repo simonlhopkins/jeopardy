@@ -1,0 +1,233 @@
+{
+  "players": [],
+  "questions": [
+    [
+      {
+        "isDailyDouble": false,
+        "question": "This planet is known as the Red Planet.",
+        "answer": "What is Mars?",
+        "score": 100,
+        "id": 0
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This war was fought between the North and South regions of the United States from 1861–1865.",
+        "answer": "What is the American Civil War?",
+        "score": 100,
+        "id": 2
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This 1997 film directed by James Cameron is about a doomed ocean liner.",
+        "answer": "What is Titanic?",
+        "score": 100,
+        "id": 5
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This is the longest river in the world.",
+        "answer": "What is the Nile River?",
+        "score": 100,
+        "id": 9
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This company created the iPhone.",
+        "answer": "What is Apple?",
+        "score": 100,
+        "id": 14
+      },
+      {
+        "isDailyDouble": true,
+        "question": "This sport uses a puck instead of a ball.",
+        "answer": "What is hockey?",
+        "score": 100,
+        "id": 20
+      }
+    ],
+    [
+      {
+        "isDailyDouble": false,
+        "question": "This gas do plants absorb from the atmosphere?",
+        "answer": "What is carbon dioxide?",
+        "score": 200,
+        "id": 1
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This ancient civilization built Machu Picchu.",
+        "answer": "Who were the Incas?",
+        "score": 200,
+        "id": 4
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This movie features a theme park filled with cloned dinosaurs.",
+        "answer": "What is Jurassic Park?",
+        "score": 200,
+        "id": 8
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This country has the most population in the world.",
+        "answer": "What is India?",
+        "score": 200,
+        "id": 13
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This programming language is known for its use in web styling alongside HTML.",
+        "answer": "What is CSS?",
+        "score": 200,
+        "id": 19
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This athlete has won the most Olympic gold medals.",
+        "answer": "Who is Michael Phelps?",
+        "score": 200,
+        "id": 26
+      }
+    ],
+    [
+      {
+        "isDailyDouble": false,
+        "question": "The chemical symbol \"O\" stands for this element.",
+        "answer": "What is oxygen?",
+        "score": 300,
+        "id": 3
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This ship famously sank in 1912 after hitting an iceberg.",
+        "answer": "What is the Titanic?",
+        "score": 300,
+        "id": 7
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This superhero’s alter ego is Bruce Wayne.",
+        "answer": "Who is Batman?",
+        "score": 300,
+        "id": 12
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This desert is the largest hot desert in the world.",
+        "answer": "What is the Sahara Desert?",
+        "score": 300,
+        "id": 18
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This company developed the Windows operating system.",
+        "answer": "What is Microsoft?",
+        "score": 300,
+        "id": 25
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This country won the 2018 FIFA World Cup.",
+        "answer": "What is France?",
+        "score": 300,
+        "id": 33
+      }
+    ],
+    [
+      {
+        "isDailyDouble": false,
+        "question": "This force keeps us on the ground.",
+        "answer": "What is gravity?",
+        "score": 400,
+        "id": 6
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This wall fell in 1989, symbolizing the end of the Cold War.",
+        "answer": "What is the Berlin Wall?",
+        "score": 400,
+        "id": 11
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This wizarding school appears in Harry Potter.",
+        "answer": "What is Hogwarts?",
+        "score": 400,
+        "id": 17
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This U.S. state is known as the “Sunshine State.”",
+        "answer": "What is Florida?",
+        "score": 400,
+        "id": 24
+      },
+      {
+        "isDailyDouble": true,
+        "question": "This device routes traffic between networks on the internet.",
+        "answer": "What is a router?",
+        "score": 400,
+        "id": 32
+      },
+      {
+        "isDailyDouble": false,
+        "question": "An NBA game is played in this many quarters.",
+        "answer": "What is four?",
+        "score": 400,
+        "id": 41
+      }
+    ],
+    [
+      {
+        "isDailyDouble": false,
+        "question": "Water boils at this temperature in Celsius.",
+        "answer": "What is 100 degrees Celsius?",
+        "score": 500,
+        "id": 10
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This U.S. president issued the Emancipation Proclamation.",
+        "answer": "Who is Abraham Lincoln?",
+        "score": 500,
+        "id": 16
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This animated film features a talking snowman named Olaf.",
+        "answer": "What is Frozen?",
+        "score": 500,
+        "id": 23
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This continent is home to the Amazon Rainforest.",
+        "answer": "What is South America?",
+        "score": 500,
+        "id": 31
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This term describes malicious software.",
+        "answer": "What is malware?",
+        "score": 500,
+        "id": 40
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This tennis tournament is played on grass courts in London.",
+        "answer": "What is Wimbledon?",
+        "score": 500,
+        "id": 50
+      }
+    ]
+  ],
+  "history": [],
+  "currentTurnData": {
+    "buzzerState": 1,
+    "question": null,
+    "answerStack": [],
+    "buzzHistory": [],
+    "questionTimeLeft": 5
+  }
+}
