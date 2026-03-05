@@ -2,19 +2,19 @@
   "players": [
     {
       "displayName": "simon",
-      "socketId": "dayLt7bjixdTaC1YAAAO"
+      "socketId": "dhlC5pYZlK7csGeWAAAL"
     },
     {
       "displayName": "kendra",
-      "socketId": "iJwA8pW9XyfrNutEAAAP"
+      "socketId": "LT8XfBTOzwnl41TqAAAI"
     },
     {
       "displayName": "kevin",
-      "socketId": "Ba-_NhCAAp5Oza5nAAAV"
+      "socketId": null
     },
     {
       "displayName": "noah",
-      "socketId": "o-JmqbUjw8LkmWh0AAAS"
+      "socketId": null
     }
   ],
   "categories": [
@@ -282,10 +282,26 @@
     }
   ],
   "currentTurnData": {
-    "buzzerState": 1,
-    "question": null,
+    "buzzerState": 0,
+    "question": {
+      "isDailyDouble": false,
+      "question": "A film subtitled \"The Ballad of Songbirds and Snakes\" takes place 64 years prior to the other four films in this series",
+      "answer": "The Hunger Games",
+      "score": 200,
+      "id": 13
+    },
     "buzzHistory": [],
-    "answerStack": [],
-    "questionTimeLeft": 10
+    "answerStack": [
+      {
+        "player": {
+          "displayName": "simon",
+          "socketId": null
+        },
+        "answerTimeLeft": 6,
+        "result": 1,
+        "wager": null
+      }
+    ],
+    "questionTimeLeft": 7
   }
 }

@@ -16,6 +16,7 @@ var BuzzerState;
 function DefaultGameState() {
     return {
         players: [],
+        categories: [],
         questions: [],
         history: [],
         currentTurnData: {

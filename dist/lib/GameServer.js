@@ -71,6 +71,18 @@ class GameServer {
                     console.log("cannot update the question if you're not reading a question or choosing a question");
                 }
             });
+            socket.on("host-update-google-sheet", async (data) => {
+                const { sheetId, sheetName } = data;
+                try {
+                    const gameData = await GameServer.CreateQuestionsFromGoogleSheet(sheetId, sheetName);
+                    this.getServerStore().resetGame();
+                    this.getServerStore().setQuestions(gameData);
+                    this.updateAllClientState();
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            });
             socket.on("host-open-buzzer", () => {
                 const turnPhase = GameUtil_1.default.GetTurnPhase(this.getGameState());
                 if (turnPhase.turnState == IGameTurn_1.TurnState.OPEN) {
@@ -262,7 +274,6 @@ class GameServer {
         if (fs_1.default.existsSync(GameServer.SAVE_PATH)) {
             const data = fs_1.default.readFileSync(GameServer.SAVE_PATH, "utf-8");
             const parsed = JSON.parse(data);
-            console.log(parsed);
             //when we load the previous state from scratch, we don't want to include the socket ids since they probably don't exist anymore.
             parsed.players = parsed.players.map((player) => ({
                 ...player,
@@ -274,7 +285,7 @@ class GameServer {
             }
         }
         else {
-            const questions = await GameServer.CreateQuestionsFromGoogleSheet();
+            const questions = await GameServer.CreateQuestionsFromGoogleSheet("18r3MSbXelmld3OgPJooMGLPieWx4vaUn5Ssv6jxYx8o", "Sheet2");
             this.getServerStore().setQuestions(questions);
         }
     }
@@ -318,21 +329,22 @@ class GameServer {
         }
         return ret;
     }
-    static async CreateQuestionsFromGoogleSheet() {
-        console.log("parsing...");
-        const spreadsheetId = "18r3MSbXelmld3OgPJooMGLPieWx4vaUn5Ssv6jxYx8o";
-        const parser = new public_google_sheets_parser_1.default(spreadsheetId, "Sheet2");
+    static async CreateQuestionsFromGoogleSheet(spreadsheetId, sheetName) {
+        console.log(spreadsheetId, sheetName);
+        const parser = new public_google_sheets_parser_1.default(spreadsheetId, sheetName);
         const ret = [];
         var dailyDoubleOptions = [];
-        const parsed = (await parser.parse()).map((row) => Object.values(row));
+        const parsed = await parser.parse();
+        const categories = Object.keys(parsed[0]);
+        const rawQuestions = parsed.map((row) => Object.values(row));
         for (let row = 0; row < 5; row++) {
             ret.push([]);
             for (let col = 0; col < 6; col++) {
                 const rowIndex = row * 2;
                 ret[row].push({
                     isDailyDouble: false,
-                    question: parsed[rowIndex][col],
-                    answer: parsed[rowIndex + 1][col],
+                    question: rawQuestions[rowIndex][col],
+                    answer: rawQuestions[rowIndex + 1][col],
                     score: (row + 1) * 100,
                     id: GameServer.cantorPair(row, col),
                 });
@@ -344,7 +356,10 @@ class GameServer {
             const pos = dailyDoubleOptions[i];
             ret[pos.row][pos.col].isDailyDouble = true;
         }
-        return ret;
+        return {
+            categories,
+            questions: ret,
+        };
     }
 }
 GameServer.SAVE_PATH = path_1.default.resolve(__dirname, "gameState.json");

@@ -1,46 +1,59 @@
 {
-  "players": [],
+  "players": [
+    {
+      "displayName": "simon",
+      "socketId": "ITktuWX6AzSGDCtGAAAD"
+    }
+  ],
+  "categories": [
+    "Science",
+    "History",
+    "Movies",
+    "Geography",
+    "Technology",
+    "Sports"
+  ],
   "questions": [
     [
       {
         "isDailyDouble": false,
         "question": "This planet is known as the Red Planet.",
-        "answer": "What is Mars?",
+        "answer": " Mars?",
         "score": 100,
         "id": 0
       },
       {
         "isDailyDouble": false,
         "question": "This war was fought between the North and South regions of the United States from 1861–1865.",
-        "answer": "What is the American Civil War?",
+        "answer": " the American Civil War?",
         "score": 100,
         "id": 2
       },
       {
         "isDailyDouble": false,
         "question": "This 1997 film directed by James Cameron is about a doomed ocean liner.",
-        "answer": "What is Titanic?",
+        "answer": " Titanic?",
         "score": 100,
         "id": 5
       },
       {
         "isDailyDouble": false,
         "question": "This is the longest river in the world.",
-        "answer": "What is the Nile River?",
+        "answer": " the Nile River?",
         "score": 100,
         "id": 9
       },
       {
         "isDailyDouble": false,
         "question": "This company created the iPhone.",
-        "answer": "What is Apple?",
+        "answer": " Apple?",
         "score": 100,
         "id": 14
       },
       {
-        "isDailyDouble": true,
+        "isDailyDouble": false,
         "question": "This sport uses a puck instead of a ball.",
-        "answer": "What is hockey?",
+        "answer": " hockey?",
         "score": 100,
         "id": 20
       }
@@ -49,7 +62,7 @@
       {
         "isDailyDouble": false,
         "question": "This gas do plants absorb from the atmosphere?",
-        "answer": "What is carbon dioxide?",
+        "answer": " carbon dioxide?",
         "score": 200,
         "id": 1
       },
@@ -63,21 +76,21 @@
       {
         "isDailyDouble": false,
         "question": "This movie features a theme park filled with cloned dinosaurs.",
-        "answer": "What is Jurassic Park?",
+        "answer": " Jurassic Park?",
         "score": 200,
         "id": 8
       },
       {
         "isDailyDouble": false,
         "question": "This country has the most population in the world.",
-        "answer": "What is India?",
+        "answer": " India?",
         "score": 200,
         "id": 13
       },
       {
         "isDailyDouble": false,
         "question": "This programming language is known for its use in web styling alongside HTML.",
-        "answer": "What is CSS?",
+        "answer": " CSS?",
         "score": 200,
         "id": 19
       },
@@ -91,21 +104,21 @@
     ],
     [
       {
-        "isDailyDouble": false,
+        "isDailyDouble": true,
         "question": "The chemical symbol \"O\" stands for this element.",
-        "answer": "What is oxygen?",
+        "answer": " oxygen?",
         "score": 300,
         "id": 3
       },
       {
         "isDailyDouble": false,
         "question": "This ship famously sank in 1912 after hitting an iceberg.",
-        "answer": "What is the Titanic?",
+        "answer": " the Titanic?",
         "score": 300,
         "id": 7
       },
       {
-        "isDailyDouble": false,
+        "isDailyDouble": true,
         "question": "This superhero’s alter ego is Bruce Wayne.",
         "answer": "Who is Batman?",
         "score": 300,
@@ -114,21 +127,21 @@
       {
         "isDailyDouble": false,
         "question": "This desert is the largest hot desert in the world.",
-        "answer": "What is the Sahara Desert?",
+        "answer": " the Sahara Desert?",
         "score": 300,
         "id": 18
       },
       {
         "isDailyDouble": false,
         "question": "This company developed the Windows operating system.",
-        "answer": "What is Microsoft?",
+        "answer": " Microsoft?",
         "score": 300,
         "id": 25
       },
       {
         "isDailyDouble": false,
         "question": "This country won the 2018 FIFA World Cup.",
-        "answer": "What is France?",
+        "answer": " France?",
         "score": 300,
         "id": 33
       }
@@ -137,42 +150,42 @@
       {
         "isDailyDouble": false,
         "question": "This force keeps us on the ground.",
-        "answer": "What is gravity?",
+        "answer": " gravity?",
         "score": 400,
         "id": 6
       },
       {
         "isDailyDouble": false,
         "question": "This wall fell in 1989, symbolizing the end of the Cold War.",
-        "answer": "What is the Berlin Wall?",
+        "answer": " the Berlin Wall?",
         "score": 400,
         "id": 11
       },
       {
         "isDailyDouble": false,
         "question": "This wizarding school appears in Harry Potter.",
-        "answer": "What is Hogwarts?",
+        "answer": " Hogwarts?",
         "score": 400,
         "id": 17
       },
       {
         "isDailyDouble": false,
         "question": "This U.S. state is known as the “Sunshine State.”",
-        "answer": "What is Florida?",
+        "answer": " Florida?",
         "score": 400,
         "id": 24
       },
       {
-        "isDailyDouble": true,
+        "isDailyDouble": false,
         "question": "This device routes traffic between networks on the internet.",
-        "answer": "What is a router?",
+        "answer": " a router?",
         "score": 400,
         "id": 32
       },
       {
         "isDailyDouble": false,
         "question": "An NBA game is played in this many quarters.",
-        "answer": "What is four?",
+        "answer": " four?",
         "score": 400,
         "id": 41
       }
@@ -181,7 +194,7 @@
       {
         "isDailyDouble": false,
         "question": "Water boils at this temperature in Celsius.",
-        "answer": "What is 100 degrees Celsius?",
+        "answer": " 100 degrees Celsius?",
         "score": 500,
         "id": 10
       },
@@ -195,28 +208,28 @@
       {
         "isDailyDouble": false,
         "question": "This animated film features a talking snowman named Olaf.",
-        "answer": "What is Frozen?",
+        "answer": " Frozen?",
         "score": 500,
         "id": 23
       },
       {
         "isDailyDouble": false,
         "question": "This continent is home to the Amazon Rainforest.",
-        "answer": "What is South America?",
+        "answer": " South America?",
         "score": 500,
         "id": 31
       },
       {
         "isDailyDouble": false,
         "question": "This term describes malicious software.",
-        "answer": "What is malware?",
+        "answer": " malware?",
         "score": 500,
         "id": 40
       },
       {
         "isDailyDouble": false,
         "question": "This tennis tournament is played on grass courts in London.",
-        "answer": "What is Wimbledon?",
+        "answer": " Wimbledon?",
         "score": 500,
         "id": 50
       }

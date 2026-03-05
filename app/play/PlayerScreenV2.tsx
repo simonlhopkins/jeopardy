@@ -100,7 +100,12 @@ export default function PlayerScreenV2({
       <div className="row-start-1 row-span-1 bg-(--color-primary) overflow-x-scroll p-2">
         <PlayerBar gameState={gameState} username={username} />
       </div>
-      <div className="row-start-2 row-end-3  bg-(--color-primary) text-sm items-center flex p-2 ">
+      <div
+        className={clsx(
+          "row-start-2 row-end-3  bg-(--color-primary) text-sm items-center flex p-2",
+          turnPhase.turnState == TurnState.OPEN && "border-4 border-white"
+        )}
+      >
         {statusBoxContents}
       </div>
       <div className="row-start-3 row-end-8 bg-(--color-primary) flex p-2">

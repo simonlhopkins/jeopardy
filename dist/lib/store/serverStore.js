@@ -27,9 +27,10 @@ exports.useServerGameStore = (0, zustand_1.create)((set, get) => ({
         }
         return { gameState: state };
     }),
-    setQuestions: (questions) => set((store) => {
+    setQuestions: (gameData) => set((store) => {
         const state = { ...store.gameState };
-        state.questions = questions;
+        state.questions = gameData.questions;
+        state.categories = gameData.categories;
         return { gameState: state };
     }),
     setCurrentQuestion: (question) => set((store) => {
