@@ -2,19 +2,19 @@
   "players": [
     {
       "displayName": "simon",
-      "socketId": "dhlC5pYZlK7csGeWAAAL"
+      "socketId": "69j41y03MvjJGkqnAAAI"
     },
     {
       "displayName": "kendra",
-      "socketId": "LT8XfBTOzwnl41TqAAAI"
+      "socketId": "5PCELbkOibpu8fhqAAAG"
     },
     {
       "displayName": "kevin",
-      "socketId": null
+      "socketId": "GYuSZOwYVJfiY4CWAAAK"
     },
     {
       "displayName": "noah",
-      "socketId": null
+      "socketId": "Bv3mA6hZdc_LuMYDAAAL"
     }
   ],
   "categories": [
@@ -302,6 +302,6 @@
         "wager": null
       }
     ],
-    "questionTimeLeft": 7
+    "questionTimeLeft": 0
   }
 }

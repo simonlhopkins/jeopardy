@@ -16,7 +16,9 @@ export default function PlayerJeopardyBoard({
     <div className="grid grid-rows-[auto_repeat(5,1fr)] flex-1 grid-cols-6 gap-2">
       {gameState.categories.map((category, i) => (
         <div key={i}>
-          <p className="text-sm text-wrap break-all">{category}</p>
+          <p className="text-sm text-wrap break-all border-2 p-2 h-full">
+            {category}
+          </p>
         </div>
       ))}
       {gameState.questions.flat().map((question, i) => (

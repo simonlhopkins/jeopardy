@@ -9,6 +9,7 @@ import PlayerJeopardyBoard from "../play/PlayerJeopardyBoard";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import { TurnPhase, TurnState } from "@/lib/JeopardyGame/IGameTurn";
 import { IGameState } from "@/lib/JeopardyGame/IGameState";
+import PlayerBar from "../play/PlayerBar";
 
 export default function Game() {
   const hostClient = useRef<GameClient | null>(null);
@@ -45,6 +46,9 @@ export default function Game() {
   return (
     <div className="bg-(--color-primary) flex-1 flex flex-col">
       <p>game</p>
+      <div className="h-18">
+        <PlayerBar gameState={gameState} username="" />
+      </div>
       <p className="text-xl">{GetTopMessage(gameState)}</p>
       <PlayerJeopardyBoard
         gameState={gameState}
