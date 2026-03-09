@@ -2,7 +2,7 @@ import PlayerClient from "@/lib/Client/PlayerClient";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import { BuzzerState, IGameState } from "@/lib/JeopardyGame/IGameState";
 import clsx from "clsx";
-import PlayerJeopardyBoard from "./PlayerJeopardyBoard";
+import JeopardyBoard from "../Components/JeopardyBoard";
 import {
   AnswerResult,
   TurnPhase,
@@ -96,20 +96,20 @@ export default function PlayerScreenV2({
   }
 
   return (
-    <div className="grid grid-rows-8 flex-1 overflow-hidden gap-2">
-      <div className="row-start-1 row-span-1 bg-(--color-primary) overflow-x-scroll p-2">
+    <div className="grid grid-rows-8 flex-1 gap-2">
+      <div className="row-start-1 row-span-1 bg-(--color-primary) overflow-x-scroll p-2 pt-4">
         <PlayerBar gameState={gameState} username={username} />
       </div>
-      <div
+      {/* <div
         className={clsx(
           "row-start-2 row-end-3  bg-(--color-primary) text-sm items-center flex p-2",
           turnPhase.turnState == TurnState.OPEN && "border-4 border-white"
         )}
       >
         {statusBoxContents}
-      </div>
-      <div className="row-start-3 row-end-8 bg-(--color-primary) flex p-2">
-        <PlayerJeopardyBoard
+      </div> */}
+      <div className="row-start-3 row-end-8 flex p-2">
+        <JeopardyBoard
           gameState={gameState}
           onQuestionClick={null}
           showDailyDoubles={false}
@@ -135,8 +135,8 @@ function getBuzzBgStyle(turnPhase: TurnPhase) {
   if (turnPhase.turnState == TurnState.OPEN) {
     return `linear-gradient(
         to right,
-        green ${(turnPhase.gameTurn.questionTimeLeft / 10) * 100}%,
-        transparent ${(turnPhase.gameTurn.questionTimeLeft / 10) * 100}%
+        green ${(turnPhase.gameTurn.questionTimeLeft / 5) * 100}%,
+        transparent ${(turnPhase.gameTurn.questionTimeLeft / 5) * 100}%
       )`;
   }
   return "";

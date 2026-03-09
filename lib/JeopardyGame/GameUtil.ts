@@ -148,8 +148,9 @@ export default class GameUtil {
     username: string,
     gameState: IGameState
   ) {
+    const turnPhase = GameUtil.GetTurnPhase(gameState);
     return (
-      gameState.currentTurnData.buzzerState != BuzzerState.OPEN ||
+      turnPhase.turnState != TurnState.OPEN ||
       gameState.currentTurnData.answerStack
         .filter((answer) => answer.result == AnswerResult.INCORRECT)
         .some((answer) => answer.player.displayName == username) ||
@@ -240,5 +241,13 @@ export default class GameUtil {
         }
       }
     }
+  }
+  public static ConvertNumberToCurrency(number: number) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
   }
 }

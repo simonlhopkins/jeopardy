@@ -1,0 +1,38 @@
+@keyframes spin {
+  from {
+    transform: rotateY(-90deg) translateX(-50%) rotateY(90deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-90deg) translateX(-50%) rotateY(90deg) rotateY(360deg);
+  }
+}
+.answerVisible {
+  transform: rotateY(-90deg) translateX(-50%) rotateY(90deg) rotateY(0deg);
+}
+.questionVisible {
+  transform: rotateY(-90deg) translateX(-50%) rotateY(90deg) rotateY(90deg);
+}
+.parent {
+  transform-style: preserve-3d;
+  transition: transform 1000ms linear;
+  /* animation: spin 4s linear infinite; */
+}
+
+.right {
+  transform: rotateY(-90deg) translateX(50%) rotateY(90deg);
+}
+
+.front {
+  transform: rotateY(-90deg) rotateY(-90deg) translateX(50%) rotateY(90deg);
+}
+.overlayCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: url("/questionBg.jpg");
+  padding: 2rem;
+}

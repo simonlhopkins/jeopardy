@@ -43,7 +43,7 @@ export default function PlayerBar({ gameState, username }: Props) {
   }
 
   return (
-    <div className="flex h-full items-center gap-2">
+    <div className="flex items-center gap-2 h-full">
       {[
         ...GameUtil.GetAllConnectedPlayers(gameState).filter(
           (player) => player.displayName == username
@@ -64,25 +64,27 @@ export default function PlayerBar({ gameState, username }: Props) {
       ].map((player) => (
         <div
           key={player.socketId}
-          className="h-full aspect-square border-2 rounded-full flex items-center justify-center flex-col relative"
+          className="h-full border-2 flex items-center justify-center flex-col relative w-24"
           style={{ background: getBGStyle(player, gameState) }}
         >
-          <div className="absolute right-0 top-0">{getStatusEmoji(player)}</div>
-          <p
-            className={clsx(
-              username == player.displayName && "font-bold",
-              GameUtil.GetPersonWhoShouldBeChoosingQuestion(gameState)
-                ?.displayName == player.displayName && "text-blue-500"
-            )}
-          >
-            {player.displayName}
-          </p>
-          <p>
-            {GameUtil.GetPlayerScore(
-              player.displayName,
-              GameUtil.GetAllGameTurns(gameState)
-            )}
-          </p>
+          <div className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 text-2xl font-[Noto_Color_Emoji]">
+            {getStatusEmoji(player)}
+          </div>
+          <div>
+            <p className="font-bold text-shadow-[2px_2px_1px_black]">
+              {GameUtil.ConvertNumberToCurrency(
+                GameUtil.GetPlayerScore(
+                  player.displayName,
+                  GameUtil.GetAllGameTurns(gameState)
+                )
+              )}
+            </p>
+          </div>
+          <div className="flex-1 w-full text-center">
+            <p className={clsx(username == player.displayName && "underline")}>
+              {player.displayName}
+            </p>
+          </div>
         </div>
       ))}
     </div>

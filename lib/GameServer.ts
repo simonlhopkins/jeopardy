@@ -183,10 +183,15 @@ export default class GameServer {
                 } players`
               );
               //todo, make this a function to choose the winner, ideally it would be the top of the buzz history
-              const player = [
-                ...this.getGameState().currentTurnData.buzzHistory,
-              ].sort((a, b) => a.timestamp - b.timestamp)[0]!.player;
-              this.getServerStore().GivePlayerChanceToAnswer(player);
+              const playersWhoBuzzedIn =
+                this.getGameState().currentTurnData.buzzHistory.map(
+                  (buzz) => buzz.player
+                );
+              const chosenPlayer =
+                playersWhoBuzzedIn[
+                  Math.floor(playersWhoBuzzedIn.length * Math.random())
+                ];
+              this.getServerStore().GivePlayerChanceToAnswer(chosenPlayer);
               this.ClearAnswerCountdownTimeout();
               this.StartAnswerCountdown();
             }
@@ -197,8 +202,6 @@ export default class GameServer {
             "got a buzz from a player that is not included in players"
           );
         }
-
-        // this.updateAllClientState();
       });
 
       socket.on("player-place-wager", (amount: number) => {
@@ -260,7 +263,7 @@ export default class GameServer {
       return;
     }
     this.getServerStore().openBuzzer();
-    let seconds = 10;
+    let seconds = 5;
     const decrementSeconds = () => {
       this.getServerStore().SetTimeLeftForAllPlayersToAnswer(seconds);
       this.updateAllClientState();

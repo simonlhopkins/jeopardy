@@ -5,7 +5,6 @@ import { socket } from "@/lib/socket";
 import { useClientGameStore } from "@/lib/store/clientStore";
 import { useEffect, useRef } from "react";
 import JeopardyBoard from "../Components/JeopardyBoard";
-import PlayerJeopardyBoard from "../play/PlayerJeopardyBoard";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import { TurnPhase, TurnState } from "@/lib/JeopardyGame/IGameTurn";
 import { IGameState } from "@/lib/JeopardyGame/IGameState";
@@ -50,7 +49,7 @@ export default function Game() {
         <PlayerBar gameState={gameState} username="" />
       </div>
       <p className="text-xl">{GetTopMessage(gameState)}</p>
-      <PlayerJeopardyBoard
+      <JeopardyBoard
         gameState={gameState}
         onQuestionClick={null}
         showDailyDoubles={false}

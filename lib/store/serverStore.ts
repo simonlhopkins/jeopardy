@@ -169,6 +169,7 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
           ...store.gameState,
           currentTurnData: {
             ...store.gameState.currentTurnData,
+            buzzerState: BuzzerState.CLOSED,
           },
         },
       };

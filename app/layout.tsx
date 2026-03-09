@@ -1,10 +1,11 @@
 "use client";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
+
 import "./globals.css";
 import { socket } from "@/lib/socket";
 import { useEffect, useState } from "react";
 import { useClientGameStore } from "@/lib/store/clientStore";
-import DebugDropdown from "./Components/DebugDropdown";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

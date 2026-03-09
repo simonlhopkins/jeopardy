@@ -4,7 +4,6 @@ import HostClient from "@/lib/Client/HostClient";
 import { socket } from "@/lib/socket";
 import { useClientGameStore } from "@/lib/store/clientStore";
 import { useEffect, useRef } from "react";
-import JeopardyBoard from "../Components/JeopardyBoard";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
 import PlayerStatusArea from "./PlayerStatusArea";
 import QuestionStatusArea from "./QuestionStatusArea";
@@ -12,7 +11,7 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 import deepEqual from "fast-deep-equal";
 import { TurnState } from "@/lib/JeopardyGame/IGameTurn";
 import GoogleSheetForm from "./GoogleSheetForm";
-import PlayerJeopardyBoard from "../play/PlayerJeopardyBoard";
+import JeopardyBoard from "../Components/JeopardyBoard";
 
 export default function Host() {
   const hostClient = useRef<HostClient | null>(null);
@@ -38,8 +37,19 @@ export default function Host() {
     }
     socket.on("connect", onConnect);
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        // modern, works even if Shift is held
+        e.preventDefault(); // prevents page scroll
+        console.log("Space bar pressed!");
+        getHostClient().OpenBuzzer();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
       socket.off("connect", onConnect);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
   return (
@@ -93,7 +103,7 @@ export default function Host() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="overflow-hidden flex flex-col">
-          <PlayerJeopardyBoard
+          <JeopardyBoard
             gameState={gameState}
             showDailyDoubles={true}
             onQuestionClick={(question) => {
