@@ -12,16 +12,22 @@
 .questionVisible {
   transform: rotateY(-90deg) translateX(-50%) rotateY(90deg) rotateY(90deg);
 }
+.dailyDoubleVisible {
+  transform: rotateY(-90deg) translateX(-50%) rotateY(90deg) rotateY(180deg);
+}
 .parent {
   transform-style: preserve-3d;
-  transition: transform 1000ms linear;
+  transition: transform 1200ms linear;
   /* animation: spin 4s linear infinite; */
 }
-
+/* legend */
+/* https://stackoverflow.com/questions/20184600/translatez-percentages-css-3d-transforms */
 .right {
   transform: rotateY(-90deg) translateX(50%) rotateY(90deg);
 }
-
+.left {
+  transform: rotateY(90deg) translateX(50%) rotateY(90deg);
+}
 .front {
   transform: rotateY(-90deg) rotateY(-90deg) translateX(50%) rotateY(90deg);
 }
@@ -34,5 +40,22 @@
   height: 100%;
   position: absolute;
   background: url("/questionBg.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   padding: 2rem;
+}
+
+.boardSquare {
+  overflow: hidden;
+  text-shadow: 2px 2px 1px black;
+  font-family: Swiss911;
+  background-image: url("/boardTileBg.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.dailyDoubleCard {
+  background: url("/dailyDouble.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }

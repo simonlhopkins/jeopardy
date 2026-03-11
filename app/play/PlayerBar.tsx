@@ -3,6 +3,7 @@ import { IGameState } from "@/lib/JeopardyGame/IGameState";
 import { AnswerResult, TurnState } from "@/lib/JeopardyGame/IGameTurn";
 import IPlayer from "@/lib/JeopardyGame/IPlayer";
 import clsx from "clsx";
+import styles from "./playerBar.module.css";
 
 interface Props {
   gameState: IGameState;
@@ -20,6 +21,16 @@ export default function PlayerBar({ gameState, username }: Props) {
           ? "🤔"
           : "👀";
       case TurnState.READING:
+        if (turnPhase.gameTurn.question.isDailyDouble) {
+          if (
+            GameUtil.GetPersonWhoShouldBeChoosingQuestion(gameState)
+              ?.displayName == player.displayName
+          ) {
+            return "💰";
+          } else {
+            return "🙄";
+          }
+        }
         return "👂";
       case TurnState.OPEN:
         return GameUtil.GetPlayersWhoAnsweredIncorrect(gameState).some(
@@ -67,7 +78,12 @@ export default function PlayerBar({ gameState, username }: Props) {
           className="h-full border-2 flex items-center justify-center flex-col relative w-24"
           style={{ background: getBGStyle(player, gameState) }}
         >
-          <div className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 text-2xl font-[Noto_Color_Emoji]">
+          <div
+            className={clsx(
+              "absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 text-2xl",
+              styles.emoji
+            )}
+          >
             {getStatusEmoji(player)}
           </div>
           <div>

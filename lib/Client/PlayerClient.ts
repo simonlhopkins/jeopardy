@@ -4,30 +4,28 @@ import { useClientGameStore } from "../store/clientStore";
 import IBuzzerSubmitData from "../JeopardyGame/IBuzzerSubmitData";
 
 export default class PlayerClient {
-  socket: Socket;
-  constructor(socket: Socket) {
-    this.socket = socket;
-  }
+  private socket: Socket | null = null;
+  constructor() {}
 
-  public OnConnection() {
+  public OnConnection(socket: Socket) {
     //set up listeners
     //this might be unnecessary and lead to bugs
-    this.socket.on("update-state", (gameState: IGameState) => {
-      if (
-        gameState.players.some((player) => player.socketId == this.socket.id)
-      ) {
+    this.socket = socket;
+    socket.on("update-state", (gameState: IGameState) => {
+      if (gameState.players.some((player) => player.socketId == socket.id)) {
         useClientGameStore.getState().updateState(gameState);
       } else {
         useClientGameStore.getState().onlyUpdatePlayers(gameState);
-        console.warn(
-          `ignoring state update since there are no players in the game with socket id ${this.socket.id}`
-        );
       }
     });
-    this.socket.emit("initializeOnConnection");
+    socket.emit("initializeOnConnection");
   }
 
   public JoinGame(username: string) {
+    if (!this.socket) {
+      console.log("socket does not exist yet");
+      return;
+    }
     this.socket.emit("joinGame", {
       username,
       socketId: this.socket.id,
@@ -35,9 +33,17 @@ export default class PlayerClient {
   }
 
   public SubmitBuzz() {
+    if (!this.socket) {
+      console.log("socket does not exist yet");
+      return;
+    }
     this.socket.emit("player-submit-buzz", Date.now());
   }
   public PlaceWager(amount: number) {
+    if (!this.socket) {
+      console.log("socket does not exist yet");
+      return;
+    }
     this.socket.emit("player-place-wager", amount);
   }
 }

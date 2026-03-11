@@ -1,10 +1,7 @@
 import PlayerClient from "@/lib/Client/PlayerClient";
 import { IGameState } from "@/lib/JeopardyGame/IGameState";
 import { AnswerResult, TurnState } from "@/lib/JeopardyGame/IGameTurn";
-import BuzzerScreen from "./GameScreens/BuzzerScreen";
 import GameUtil from "@/lib/JeopardyGame/GameUtil";
-import DisplayQuestionScreen from "./GameScreens/DisplayQuestionScreen";
-import AnswerScreen from "./GameScreens/AnswerScreen";
 
 interface Props {
   gameState: IGameState;

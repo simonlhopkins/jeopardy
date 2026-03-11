@@ -14,7 +14,6 @@ export default function QuestionStatusArea({ getHostClient }: Props) {
     (state) => state.gameState.currentTurnData
   );
   const players = useDeepEqualGameStore((state) => state.gameState.players);
-
   return (
     <div>
       <table>
@@ -68,9 +67,15 @@ export default function QuestionStatusArea({ getHostClient }: Props) {
                 style={{
                   background: ` linear-gradient(
                                 to right,
-                                red ${(answer.answerTimeLeft / 10) * 100}%,
+                                red ${
+                                  (answer.answerTimeLeft /
+                                    GameUtil.RESPONSE_TIME) *
+                                  100
+                                }%,
                                 transparent ${
-                                  (answer.answerTimeLeft / 10) * 100
+                                  (answer.answerTimeLeft /
+                                    GameUtil.RESPONSE_TIME) *
+                                  100
                                 }%
                               )`,
                 }}

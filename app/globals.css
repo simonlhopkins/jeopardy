@@ -61,6 +61,10 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: Swiss911;
+  src: url("/fonts/Swiss911-bold.ttf") format("truetype");
+}
 body {
   background: var(--background);
   color: var(--foreground);

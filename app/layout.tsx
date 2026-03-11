@@ -31,10 +31,6 @@ export default function RootLayout({
   const socketId = useClientGameStore((state) => state.socketId);
 
   useEffect(() => {
-    // if (playerClient.current == null) {
-    //   getPlayerClient().initialize();
-    // }
-
     function onConnect() {
       setSocketId(socket.id!);
     }

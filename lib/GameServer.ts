@@ -263,10 +263,9 @@ export default class GameServer {
       return;
     }
     this.getServerStore().openBuzzer();
-    let seconds = 5;
+    let seconds = GameUtil.BUZZ_IN_WINDOW_TIME;
     const decrementSeconds = () => {
       this.getServerStore().SetTimeLeftForAllPlayersToAnswer(seconds);
-      this.updateAllClientState();
       if (seconds == 0) {
         console.log("time out done");
         if (this.getGameState().currentTurnData.buzzHistory.length == 0) {
@@ -275,21 +274,16 @@ export default class GameServer {
         this.updateAllClientState();
         return;
       }
-
-      if (
-        GameUtil.GetTurnPhase(this.getGameState()).turnState != TurnState.OPEN
-      ) {
-        console.log("canceling timeout, no longer in open state");
-      }
       seconds -= 1;
       this.questionCountdownTimeout = setTimeout(decrementSeconds, 1000);
+      this.updateAllClientState();
     };
     decrementSeconds();
   }
 
   private StartAnswerCountdown() {
     this.ClearAnswerCountdownTimeout();
-    var seconds = 10;
+    var seconds = GameUtil.RESPONSE_TIME;
     const decrementSeconds = () => {
       this.getServerStore().SetTimeLeftForPlayerToAnswer(seconds);
       this.updateAllClientState();
@@ -380,35 +374,6 @@ export default class GameServer {
     }
     return ret;
   }
-  private static CreateQuestions(): IQuestion[][] {
-    const ret: IQuestion[][] = [];
-    const rows = 5;
-    const cols = 6;
-
-    var dailyDoubleOptions = [];
-
-    for (let row = 0; row < rows; row++) {
-      ret.push([]);
-      for (let col = 0; col < cols; col++) {
-        ret[row].push({
-          isDailyDouble: false,
-          question: `question from row ${row}, col ${col}?`,
-          answer: `answer from row ${row}, col ${col}`,
-          score: (row + 1) * 100,
-          id: GameServer.cantorPair(row, col),
-        });
-
-        dailyDoubleOptions.push({ row, col });
-      }
-    }
-    dailyDoubleOptions = this.shuffleArr(dailyDoubleOptions);
-
-    for (let i = 0; i < 2; i++) {
-      const pos = dailyDoubleOptions[i];
-      ret[pos.row][pos.col].isDailyDouble = true;
-    }
-    return ret;
-  }
 
   private static async CreateQuestionsFromGoogleSheet(
     spreadsheetId: string,
@@ -429,7 +394,7 @@ export default class GameServer {
           isDailyDouble: false,
           question: rawQuestions[rowIndex][col],
           answer: rawQuestions[rowIndex + 1][col],
-          score: (row + 1) * 100,
+          score: (row + 1) * 200,
           id: GameServer.cantorPair(row, col),
         });
         dailyDoubleOptions.push({ row, col });

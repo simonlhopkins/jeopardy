@@ -2,11 +2,11 @@
   "players": [
     {
       "displayName": "simon",
-      "socketId": "TJ4MdLN8QPEdk-I5AADr"
+      "socketId": null
     },
     {
-      "displayName": "hello",
-      "socketId": "tdm3o8pwPj11jKncAADm"
+      "displayName": "eric",
+      "socketId": null
     }
   ],
   "categories": [
@@ -23,42 +23,42 @@
         "isDailyDouble": false,
         "question": "These are the names of the 2 engineers that founded Brainium",
         "answer": "Jake and Farhaud",
-        "score": 100,
+        "score": 200,
         "id": 0
       },
       {
         "isDailyDouble": false,
         "question": "This is the name of the engineer who sits next to Simon",
         "answer": "Noah",
-        "score": 100,
+        "score": 200,
         "id": 2
       },
       {
         "isDailyDouble": false,
         "question": "JS stands for this programming language created by Brendan Eich & trademarked in 1995",
         "answer": " javascript",
-        "score": 100,
+        "score": 200,
         "id": 5
       },
       {
         "isDailyDouble": false,
         "question": "This prequel to \"Monsters, Inc.\" shows how Mike & Sully met in school & became unlikely friends",
         "answer": "Monsters University",
-        "score": 100,
+        "score": 200,
         "id": 9
       },
       {
-        "isDailyDouble": true,
+        "isDailyDouble": false,
         "question": "Constructed of iron & wood, a velocipede was an early (& uncomfortable) version of this vehicle",
-        "answer": " Motorcycle?",
-        "score": 100,
+        "answer": " Motorcycle",
+        "score": 200,
         "id": 14
       },
       {
         "isDailyDouble": false,
         "question": "That's nuts! The name of this card game tells you which card is wild--just its number, not its suit",
         "answer": "Crazy Eights",
-        "score": 100,
+        "score": 200,
         "id": 20
       }
     ],
@@ -67,42 +67,42 @@
         "isDailyDouble": false,
         "question": "This is the year that PlayStudios aquired Brainium",
         "answer": "2022",
-        "score": 200,
+        "score": 400,
         "id": 1
       },
       {
         "isDailyDouble": false,
         "question": "This is the state that Simon grew up in",
         "answer": " Utah",
-        "score": 200,
+        "score": 400,
         "id": 4
       },
       {
         "isDailyDouble": false,
         "question": "This is the base class that many Unity Scripts derive from",
-        "answer": " Monobehavior",
-        "score": 200,
+        "answer": "Monobehavior",
+        "score": 400,
         "id": 8
       },
       {
         "isDailyDouble": false,
         "question": "A film subtitled \"The Ballad of Songbirds and Snakes\" takes place 64 years prior to the other four films in this series",
         "answer": "The Hunger Games",
-        "score": 200,
+        "score": 400,
         "id": 13
       },
       {
         "isDailyDouble": false,
         "question": "Introduced in 1997, this Toyota model was the world's first mass-produced hybrid vehicle",
         "answer": " a Prius",
-        "score": 200,
+        "score": 400,
         "id": 19
       },
       {
         "isDailyDouble": false,
         "question": "Another name for the card game solitaire is this, said to be a virtue",
         "answer": "patience",
-        "score": 200,
+        "score": 400,
         "id": 26
       }
     ],
@@ -110,43 +110,43 @@
       {
         "isDailyDouble": false,
         "question": "This space themed word game was released by Brainium in 2022",
-        "answer": " Jumbline",
-        "score": 300,
+        "answer": "Jumbline",
+        "score": 600,
         "id": 3
       },
       {
         "isDailyDouble": false,
         "question": "This is the name of the company Simon worked at prior to his time at Brainium",
         "answer": " Applovin",
-        "score": 300,
+        "score": 600,
         "id": 7
       },
       {
         "isDailyDouble": false,
         "question": "This purely functional programming language is named after a 20th‑century logician whose work helped inspire combinatory logic and functional programming concepts.",
-        "answer": " Haskell",
-        "score": 300,
+        "answer": "Haskell",
+        "score": 600,
         "id": 12
       },
       {
         "isDailyDouble": false,
         "question": "Set amongst Comanches in the Great Plains, this prequel to \"Predator\" takes place in the early 1700s",
         "answer": "Prey",
-        "score": 300,
+        "score": 600,
         "id": 18
       },
       {
         "isDailyDouble": false,
         "question": "The world's largest public BRT, or bus rapid transit system, is the Transjakarta bus system in this country",
         "answer": "Indonesia",
-        "score": 300,
+        "score": 600,
         "id": 25
       },
       {
-        "isDailyDouble": false,
+        "isDailyDouble": true,
         "question": "Draw 2, Wild & Reverse are cards in this game",
         "answer": "Uno",
-        "score": 300,
+        "score": 600,
         "id": 33
       }
     ],
@@ -155,86 +155,86 @@
         "isDailyDouble": false,
         "question": "This water vestibule appeared on the Lost Legacy cardback",
         "answer": " a vase",
-        "score": 400,
+        "score": 800,
         "id": 6
       },
       {
         "isDailyDouble": false,
         "question": "It's the trademarked name for the game that uses a hollow white celluloid ball that's 40 mm in diameter",
         "answer": " Ping Pong",
-        "score": 400,
+        "score": 800,
         "id": 11
       },
       {
         "isDailyDouble": false,
         "question": "Unlike \"ref\", this parameter modifier requires the called method to assign a value to the variable before returning, and is commonly seen paired with \"TryParse\" methods.",
-        "answer": " out.",
-        "score": 400,
+        "answer": "out.",
+        "score": 800,
         "id": 17
       },
       {
         "isDailyDouble": false,
         "question": "\"Puss in Boots\", with this actor voicing the title feline, was a spin-off of \"Shrek 2\", as well as a prequel",
         "answer": "Antonio Banderas",
-        "score": 400,
+        "score": 800,
         "id": 24
       },
       {
         "isDailyDouble": false,
         "question": "Traveling between the host city & Osaka, the first one of these began operating in 1964, just in time for the Tokyo Olympics",
         "answer": "bullet train",
-        "score": 400,
+        "score": 800,
         "id": 32
       },
       {
-        "isDailyDouble": true,
+        "isDailyDouble": false,
         "question": "The joker's (sometimes) wild in this type of poker that's an adaptation of an Asian domino game",
         "answer": "Pai Gow",
-        "score": 400,
+        "score": 800,
         "id": 41
       }
     ],
     [
       {
         "isDailyDouble": false,
-        "question": "Which electric car company briefly partnered with Brainium to include its games in their vehicles?",
+        "question": "Which electric car company briefly partnered with Brainium to include its games in their vehicles",
         "answer": "Tesla",
-        "score": 500,
+        "score": 1000,
         "id": 10
       },
       {
-        "isDailyDouble": false,
+        "isDailyDouble": true,
         "question": "This is the name of Simon's cat",
-        "answer": "Who is Eric",
-        "score": 500,
+        "answer": "Eric",
+        "score": 1000,
         "id": 16
       },
       {
         "isDailyDouble": false,
         "question": "Replacing the concept of \"null\" found in other languages, this standard library enum forces you to explicitly handle its Some and None variants.",
         "answer": " Option",
-        "score": 500,
+        "score": 1000,
         "id": 23
       },
       {
         "isDailyDouble": false,
         "question": "A prequel to \"The Mummy\", this film gave Dwayne \"The Rock\" Johnson his first starring role",
         "answer": "The Scorpion King",
-        "score": 500,
+        "score": 1000,
         "id": 31
       },
       {
         "isDailyDouble": false,
         "question": "In the shipping & freight biz, this term refers to cargo that's being transported; a \"bill of\" it is kind of like a receipt",
         "answer": " (a bill of) lading",
-        "score": 500,
+        "score": 1000,
         "id": 40
       },
       {
         "isDailyDouble": false,
         "question": "This trick-taking card game makes for a great Scrabble score, with a Z & a Q in its name",
         "answer": "bezique",
-        "score": 500,
+        "score": 1000,
         "id": 50
       }
     ]
@@ -243,11 +243,68 @@
     {
       "buzzerState": 1,
       "question": {
+        "isDailyDouble": true,
+        "question": "This is the name of Simon's cat",
+        "answer": "Eric",
+        "score": 1000,
+        "id": 16
+      },
+      "buzzHistory": [],
+      "answerStack": [
+        {
+          "answerTimeLeft": 0,
+          "player": {
+            "displayName": "simon",
+            "socketId": "-GT1389xLLGlbTQXAAAG"
+          },
+          "wager": 50,
+          "result": 1
+        }
+      ],
+      "questionTimeLeft": 10
+    },
+    {
+      "buzzerState": 1,
+      "question": {
         "isDailyDouble": false,
-        "question": "This is the state that Simon grew up in",
-        "answer": " Utah",
-        "score": 200,
-        "id": 4
+        "question": "A film subtitled \"The Ballad of Songbirds and Snakes\" takes place 64 years prior to the other four films in this series",
+        "answer": "The Hunger Games",
+        "score": 400,
+        "id": 13
+      },
+      "buzzHistory": [],
+      "answerStack": [],
+      "questionTimeLeft": 0
+    },
+    {
+      "buzzerState": 1,
+      "question": null,
+      "buzzHistory": [],
+      "answerStack": [],
+      "questionTimeLeft": 10
+    },
+    {
+      "buzzerState": 1,
+      "question": null,
+      "buzzHistory": [],
+      "answerStack": [],
+      "questionTimeLeft": 10
+    },
+    {
+      "buzzerState": 1,
+      "question": null,
+      "buzzHistory": [],
+      "answerStack": [],
+      "questionTimeLeft": 10
+    },
+    {
+      "buzzerState": 1,
+      "question": {
+        "isDailyDouble": false,
+        "question": "Introduced in 1997, this Toyota model was the world's first mass-produced hybrid vehicle",
+        "answer": " a Prius",
+        "score": 400,
+        "id": 19
       },
       "buzzHistory": [],
       "answerStack": [],
@@ -257,10 +314,49 @@
       "buzzerState": 1,
       "question": {
         "isDailyDouble": false,
-        "question": "Introduced in 1997, this Toyota model was the world's first mass-produced hybrid vehicle",
-        "answer": " a Prius",
+        "question": "The world's largest public BRT, or bus rapid transit system, is the Transjakarta bus system in this country",
+        "answer": "Indonesia",
+        "score": 600,
+        "id": 25
+      },
+      "buzzHistory": [],
+      "answerStack": [],
+      "questionTimeLeft": 0
+    },
+    {
+      "buzzerState": 1,
+      "question": {
+        "isDailyDouble": false,
+        "question": "This is the base class that many Unity Scripts derive from",
+        "answer": "Monobehavior",
+        "score": 400,
+        "id": 8
+      },
+      "buzzHistory": [],
+      "answerStack": [],
+      "questionTimeLeft": 0
+    },
+    {
+      "buzzerState": 1,
+      "question": {
+        "isDailyDouble": false,
+        "question": "This prequel to \"Monsters, Inc.\" shows how Mike & Sully met in school & became unlikely friends",
+        "answer": "Monsters University",
         "score": 200,
-        "id": 19
+        "id": 9
+      },
+      "buzzHistory": [],
+      "answerStack": [],
+      "questionTimeLeft": 0
+    },
+    {
+      "buzzerState": 1,
+      "question": {
+        "isDailyDouble": false,
+        "question": "This purely functional programming language is named after a 20th‑century logician whose work helped inspire combinatory logic and functional programming concepts.",
+        "answer": "Haskell",
+        "score": 600,
+        "id": 12
       },
       "buzzHistory": [],
       "answerStack": [],
@@ -272,7 +368,7 @@
         "isDailyDouble": false,
         "question": "Set amongst Comanches in the Great Plains, this prequel to \"Predator\" takes place in the early 1700s",
         "answer": "Prey",
-        "score": 300,
+        "score": 600,
         "id": 18
       },
       "buzzHistory": [],
@@ -283,131 +379,21 @@
       "buzzerState": 1,
       "question": {
         "isDailyDouble": false,
-        "question": "This is the base class that many Unity Scripts derive from",
-        "answer": " Monobehavior",
-        "score": 200,
-        "id": 8
+        "question": "\"Puss in Boots\", with this actor voicing the title feline, was a spin-off of \"Shrek 2\", as well as a prequel",
+        "answer": "Antonio Banderas",
+        "score": 800,
+        "id": 24
       },
       "buzzHistory": [],
       "answerStack": [],
       "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "It's the trademarked name for the game that uses a hollow white celluloid ball that's 40 mm in diameter",
-        "answer": " Ping Pong",
-        "score": 400,
-        "id": 11
-      },
-      "buzzHistory": [],
-      "answerStack": [
-        {
-          "player": {
-            "displayName": "hello",
-            "socketId": "tdm3o8pwPj11jKncAADm"
-          },
-          "answerTimeLeft": 3,
-          "result": 0,
-          "wager": null
-        }
-      ],
-      "questionTimeLeft": 4
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "JS stands for this programming language created by Brendan Eich & trademarked in 1995",
-        "answer": " javascript",
-        "score": 100,
-        "id": 5
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "Unlike \"ref\", this parameter modifier requires the called method to assign a value to the variable before returning, and is commonly seen paired with \"TryParse\" methods.",
-        "answer": " out.",
-        "score": 400,
-        "id": 17
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "A prequel to \"The Mummy\", this film gave Dwayne \"The Rock\" Johnson his first starring role",
-        "answer": "The Scorpion King",
-        "score": 500,
-        "id": 31
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "This space themed word game was released by Brainium in 2022",
-        "answer": " Jumbline",
-        "score": 300,
-        "id": 3
-      },
-      "buzzHistory": [],
-      "answerStack": [
-        {
-          "player": {
-            "displayName": "hello",
-            "socketId": "tdm3o8pwPj11jKncAADm"
-          },
-          "answerTimeLeft": 9,
-          "result": 0,
-          "wager": null
-        }
-      ],
-      "questionTimeLeft": 3
     }
   ],
   "currentTurnData": {
     "buzzerState": 1,
-    "question": {
-      "isDailyDouble": false,
-      "question": "This is the name of Simon's cat",
-      "answer": "Who is Eric",
-      "score": 500,
-      "id": 16
-    },
+    "question": null,
     "buzzHistory": [],
-    "answerStack": [
-      {
-        "player": {
-          "displayName": "simon",
-          "socketId": "TJ4MdLN8QPEdk-I5AADr"
-        },
-        "answerTimeLeft": 9,
-        "result": 0,
-        "wager": null
-      },
-      {
-        "player": {
-          "displayName": "hello",
-          "socketId": "tdm3o8pwPj11jKncAADm"
-        },
-        "answerTimeLeft": 9,
-        "result": 1,
-        "wager": null
-      }
-    ],
-    "questionTimeLeft": 1
+    "answerStack": [],
+    "questionTimeLeft": 10
   }
 }

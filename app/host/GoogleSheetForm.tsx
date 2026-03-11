@@ -1,3 +1,4 @@
+import { useClientGameStore } from "@/lib/store/clientStore";
 import { useState } from "react";
 
 export default function GoogleSheetForm({
@@ -5,17 +6,21 @@ export default function GoogleSheetForm({
 }: {
   onSubmit: (data: { spreadsheetName: string; sheetName: string }) => void;
 }) {
-  const [spreadsheetName, setSpreadsheetName] = useState("");
-  const [sheetName, setSheetName] = useState("");
+  const spreadSheetId = useClientGameStore((store) => store.spreadsheetId);
+  const sheetId = useClientGameStore((store) => store.sheetId);
+  const setSpreadSheetId = useClientGameStore(
+    (store) => store.setSpreadsheetId
+  );
+  const setSheetId = useClientGameStore((store) => store.setSheetId);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!spreadsheetName.trim()) return;
+    if (spreadSheetId && !spreadSheetId.trim()) return;
 
     onSubmit({
-      spreadsheetName: spreadsheetName.trim(),
-      sheetName: sheetName.trim(),
+      spreadsheetName: (spreadSheetId || "").trim(),
+      sheetName: (sheetId || "").trim(),
     });
   };
 
@@ -27,8 +32,8 @@ export default function GoogleSheetForm({
       <input
         type="text"
         placeholder="Spreadsheet name"
-        value={spreadsheetName}
-        onChange={(e) => setSpreadsheetName(e.target.value)}
+        value={spreadSheetId || ""}
+        onChange={(e) => setSpreadSheetId(e.target.value)}
         className="flex-1 border rounded px-3 py-2"
         required
       />
@@ -36,8 +41,8 @@ export default function GoogleSheetForm({
       <input
         type="text"
         placeholder="Sheet name (optional)"
-        value={sheetName}
-        onChange={(e) => setSheetName(e.target.value)}
+        value={sheetId || ""}
+        onChange={(e) => setSheetId(e.target.value)}
         className="flex-1 border rounded px-3 py-2"
         required
       />

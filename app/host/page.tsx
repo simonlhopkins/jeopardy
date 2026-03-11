@@ -69,12 +69,12 @@ export default function Host() {
                                 to right,
                                 red ${
                                   (gameState.currentTurnData.questionTimeLeft /
-                                    10) *
+                                    GameUtil.BUZZ_IN_WINDOW_TIME) *
                                   100
                                 }%,
                                 transparent ${
                                   (gameState.currentTurnData.questionTimeLeft /
-                                    10) *
+                                    GameUtil.BUZZ_IN_WINDOW_TIME) *
                                   100
                                 }%
                               )`,
@@ -127,14 +127,17 @@ export default function Host() {
           <p className="text-xl">
             {`state: ${GameUtil.GetTurnStateNameFromEnum(
               turnPhase.turnState
-            )} ${gameState.currentTurnData.buzzerState}`}
+            )} ${turnPhase.gameTurn.buzzerState}`}
           </p>
           <PlayerStatusArea
             getHostClient={getHostClient}
             gameState={gameState}
           />
           <button
-            disabled={turnPhase.turnState != TurnState.READING}
+            disabled={
+              turnPhase.turnState != TurnState.READING ||
+              (gameState.currentTurnData.question?.isDailyDouble ?? false)
+            }
             onClick={() => {
               getHostClient().OpenBuzzer();
             }}
@@ -163,6 +166,7 @@ export default function Host() {
           >
             Reset Game
           </button>
+          <button onClick={() => {}}>trigger final jeopardy</button>
           <QuestionStatusArea getHostClient={getHostClient} />
         </div>
       </div>

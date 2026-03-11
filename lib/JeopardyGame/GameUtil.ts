@@ -14,6 +14,9 @@ interface QuestionData {
 }
 
 export default class GameUtil {
+  public static readonly BUZZ_IN_WINDOW_TIME = 5;
+  public static readonly RESPONSE_TIME = 5;
+
   public static GetTurnStateNameFromEnum(turnState: TurnState) {
     switch (turnState) {
       case TurnState.ANSWER:
@@ -242,6 +245,19 @@ export default class GameUtil {
       }
     }
   }
+
+  public static ShowDailyDoubleScreen(gameState: IGameState) {
+    const turnPhase = this.GetTurnPhase(gameState);
+    if (turnPhase.turnState == TurnState.READING) {
+      const wagerHasBeenSet =
+        turnPhase.gameTurn.answerStack.length > 0 &&
+        turnPhase.gameTurn.answerStack[0].wager != null;
+
+      return !wagerHasBeenSet && turnPhase.gameTurn.question.isDailyDouble;
+    } else {
+      return false;
+    }
+  }
   public static ConvertNumberToCurrency(number: number) {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -249,5 +265,15 @@ export default class GameUtil {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(number);
+  }
+
+  public static PlayerIsConnected(
+    username: string,
+    socketId: string,
+    players: IPlayer[]
+  ) {
+    return players.some(
+      (player) => player.socketId == socketId && player.displayName == username
+    );
   }
 }

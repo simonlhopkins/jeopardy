@@ -5,6 +5,7 @@ import IQuestion from "@/lib/JeopardyGame/IQuestion";
 import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import styles from "./jeopardyBoard.module.css";
+import { useDeepEqualGameStore } from "@/lib/store/clientStore";
 
 interface Props {
   gameState: IGameState;
@@ -38,9 +39,6 @@ export default function JeopardyBoard({
       const squareRect = squareEl.getBoundingClientRect();
       const parentRect = gridParentRef.current!.getBoundingClientRect();
 
-      //final size will be parentRect
-      console.log(squareEl.style.left, squareEl.style.top);
-      // Position overlay on top of square
       const left =
         squareRect.left -
         parentRect.left -
@@ -80,20 +78,23 @@ export default function JeopardyBoard({
     }
   }, [gameState.currentTurnData.question?.id]);
 
-  useEffect(() => {}, [turnPhase.turnState]);
+  const showDailyDouble =
+    turnPhase.turnState == TurnState.READING &&
+    turnPhase.gameTurn.question.isDailyDouble &&
+    !(
+      turnPhase.gameTurn.answerStack.length > 0 &&
+      turnPhase.gameTurn.answerStack[0].wager != null
+    );
 
-  const questionBoxText = (() => {
-    if (turnPhase.turnState == TurnState.CHOOSING) {
-      return "";
-    } else if (
-      turnPhase.turnState == TurnState.ANSWER ||
-      turnPhase.turnState == TurnState.RESOLVED
-    ) {
-      return turnPhase.gameTurn.question.answer;
+  const getTurnStyle = () => {
+    if (showDailyDouble) {
+      return styles.dailyDoubleVisible;
     } else {
-      return turnPhase.gameTurn.question.question;
+      return turnPhase.turnState == TurnState.RESOLVED
+        ? styles.answerVisible
+        : styles.questionVisible;
     }
-  })();
+  };
 
   return (
     <div className="flex-1 relative" ref={gridParentRef}>
@@ -108,22 +109,34 @@ export default function JeopardyBoard({
           <div
             className={clsx(
               "w-full h-full transform-3d relative",
-
               styles.parent,
-              turnPhase.turnState == TurnState.RESOLVED
-                ? styles.answerVisible
-                : styles.questionVisible
+              getTurnStyle()
             )}
           >
-            <div className={clsx(styles.overlayCard, styles.front)}>
+            <div
+              className={clsx(
+                gameState.currentTurnData.question?.isDailyDouble
+                  ? styles.overlayCard
+                  : "hidden",
+                styles.left,
+                styles.dailyDoubleCard
+              )}
+            ></div>
+            <div
+              className={clsx(
+                showDailyDouble ? "hidden" : styles.overlayCard,
+                styles.front
+              )}
+            >
               <p className="text-3xl font-bold text-shadow-[2px_2px_1px_black]">
                 {gameState.currentTurnData.question?.question}
               </p>
             </div>
             <div
               className={clsx(
-                styles.overlayCard,
-                turnPhase.turnState != TurnState.RESOLVED && "hidden",
+                turnPhase.turnState == TurnState.READING
+                  ? "hidden"
+                  : styles.overlayCard,
                 styles.right
               )}
             >
@@ -139,9 +152,19 @@ export default function JeopardyBoard({
         {gameState.categories.map((category, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center font-bold text-wrap p-2 bg-[url(/boardTileBg.jpg)]"
+            className={clsx(
+              "flex flex-col items-center justify-center text-wrap p-2",
+              styles.boardSquare
+            )}
           >
-            <p className="text-sm text-center wrap-break-word text-wrap">
+            <p
+              className={clsx(
+                "text-center wrap-break-word text-wrap",
+                category.split(" ").some((word) => word.length > 8)
+                  ? "text-lg"
+                  : "text-2xl"
+              )}
+            >
               {category}
             </p>
           </div>
@@ -149,15 +172,14 @@ export default function JeopardyBoard({
         {gameState.questions.flat().map((question, i) => (
           <div
             className={clsx(
-              "overflow-hidden flex justify-center items-center bg-[url(/boardTileBg.jpg)]",
-              question.id == gameState.currentTurnData.question?.id &&
-                "text-green-500",
+              "flex justify-center items-center",
+              styles.boardSquare,
               gameState.history.some(
                 (item) => item.question?.id == question.id
               ) && "invisible",
               showDailyDoubles &&
                 question.isDailyDouble &&
-                "border-yellow-300!",
+                "border-yellow-300! border-2",
               onQuestionClick != null && "cursor-pointer"
             )}
             ref={(node) => {
@@ -177,11 +199,7 @@ export default function JeopardyBoard({
             }
             key={i}
           >
-            <p
-              className={clsx(
-                "text-xl font-black text-amber-400 text-shadow-[2px_2px_1px_black]"
-              )}
-            >
+            <p className={clsx("text-3xl text-[#dea154]")}>
               {GameUtil.ConvertNumberToCurrency(question.score)}
             </p>
           </div>
