@@ -29,12 +29,22 @@ class GameUtil {
                 "NOT DEFINED";
         }
     }
+    static GetBuzzerStateStringFromEnum(buzzerState) {
+        switch (buzzerState) {
+            case IGameState_1.BuzzerState.CLOSED:
+                return "CLOSED";
+            case IGameState_1.BuzzerState.OPEN:
+                return "OPEN";
+            default:
+                "NOT DEFINED";
+        }
+    }
     static GetAllConnectedPlayers(gameState) {
         return gameState.players.filter((player) => player.socketId != null);
     }
     static GetQuestionScore(questionData, forPlayer) {
         var _a, _b, _c, _d;
-        if ((_a = questionData.question) === null || _a === void 0 ? void 0 : _a.isDailyDouble) {
+        if (((_a = questionData.question) === null || _a === void 0 ? void 0 : _a.isDailyDouble) || questionData.isFinalJeopardy) {
             //look at the wagers
             const wagerAmount = (_b = questionData.answers.find((answer) => answer.player.displayName == forPlayer)) === null || _b === void 0 ? void 0 : _b.wager;
             return wagerAmount !== null && wagerAmount !== void 0 ? wagerAmount : 0;
@@ -49,6 +59,7 @@ class GameUtil {
     static GetPlayerScore(playerId, turns) {
         const questionsPlayerHasAnswered = turns.map((turn) => ({
             question: turn.question,
+            isFinalJeopardy: turn.isFinalJeopardy,
             answers: turn.answerStack.filter((answer) => answer.player.displayName == playerId),
         }));
         const correctScore = questionsPlayerHasAnswered
@@ -96,7 +107,8 @@ class GameUtil {
         }
     }
     static ShouldBuzzerBeDisabled(username, gameState) {
-        return (gameState.currentTurnData.buzzerState != IGameState_1.BuzzerState.OPEN ||
+        const turnPhase = GameUtil.GetTurnPhase(gameState);
+        return (turnPhase.turnState != IGameTurn_1.TurnState.OPEN ||
             gameState.currentTurnData.answerStack
                 .filter((answer) => answer.result == IGameTurn_1.AnswerResult.INCORRECT)
                 .some((answer) => answer.player.displayName == username) ||
@@ -132,19 +144,29 @@ class GameUtil {
             };
         }
         else {
-            const topAnswerIsCorrect = currentTurnData.answerStack.findIndex((answer) => answer.result == IGameTurn_1.AnswerResult.CORRECT) == 0;
+            const answerStackHasCorrectAnswer = currentTurnData.answerStack.some((answer) => answer.result == IGameTurn_1.AnswerResult.CORRECT);
             const allPlayersAnsweredWrong = this.GetEligiblePlayersForQuestion(currentTurnData.question, gameState)
                 .length ==
                 currentTurnData.answerStack.filter((answer) => answer.result == IGameTurn_1.AnswerResult.INCORRECT).length;
             const noTimeLeft = currentTurnData.questionTimeLeft == 0;
-            if (topAnswerIsCorrect || allPlayersAnsweredWrong || noTimeLeft) {
+            //if there is a correct answer in the answer stack, there is no reason to not resolve the turn
+            if (answerStackHasCorrectAnswer ||
+                allPlayersAnsweredWrong ||
+                (noTimeLeft &&
+                    currentTurnData.answerStack.filter((answer) => answer.result == IGameTurn_1.AnswerResult.INCORRECT).length == currentTurnData.answerStack.length)) {
                 return {
                     turnState: IGameTurn_1.TurnState.RESOLVED,
                     gameTurn: { ...currentTurnData, question: currentTurnData.question },
                 };
             }
+            if (currentTurnData.isFinalJeopardy && noTimeLeft) {
+                return {
+                    turnState: IGameTurn_1.TurnState.ANSWER,
+                    gameTurn: { ...currentTurnData, question: currentTurnData.question },
+                };
+            }
             const answerIsPending = currentTurnData.answerStack.findIndex((answer) => answer.result == null) == 0;
-            if (answerIsPending) {
+            if (answerIsPending && !currentTurnData.isFinalJeopardy) {
                 return {
                     turnState: IGameTurn_1.TurnState.ANSWER,
                     gameTurn: { ...currentTurnData, question: currentTurnData.question },
@@ -172,5 +194,34 @@ class GameUtil {
             }
         }
     }
+    static ShowDailyDoubleScreen(gameState) {
+        const turnPhase = this.GetTurnPhase(gameState);
+        if (turnPhase.turnState == IGameTurn_1.TurnState.READING) {
+            const wagerHasBeenSet = turnPhase.gameTurn.answerStack.length > 0 &&
+                turnPhase.gameTurn.answerStack[0].wager != null;
+            return !wagerHasBeenSet && turnPhase.gameTurn.question.isDailyDouble;
+        }
+        else {
+            return false;
+        }
+    }
+    static ConvertNumberToCurrency(number) {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(number);
+    }
+    static PlayerIsConnected(username, socketId, players) {
+        return players.some((player) => player.socketId == socketId && player.displayName == username);
+    }
+    static IsFinalJeopardy(gameState) {
+        return gameState.currentTurnData.isFinalJeopardy;
+    }
 }
+GameUtil.BUZZ_IN_WINDOW_TIME = 5;
+GameUtil.RESPONSE_TIME = 5;
+GameUtil.ROWS = 5;
+GameUtil.COLS = 4;
 exports.default = GameUtil;

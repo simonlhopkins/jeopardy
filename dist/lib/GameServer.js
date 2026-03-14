@@ -72,10 +72,10 @@ class GameServer {
                 }
             });
             socket.on("host-update-google-sheet", async (data) => {
-                const { sheetId, sheetName } = data;
+                const { sheetId, sheetName, isDoubleJeopardy } = data;
                 try {
-                    const gameData = await GameServer.CreateQuestionsFromGoogleSheet(sheetId, sheetName);
-                    this.getServerStore().resetGame();
+                    const gameData = await GameServer.CreateQuestionsFromGoogleSheet(sheetId, sheetName, isDoubleJeopardy);
+                    // this.getServerStore().resetGame();
                     this.getServerStore().setQuestions(gameData);
                     this.updateAllClientState();
                 }
@@ -85,11 +85,11 @@ class GameServer {
             });
             socket.on("host-open-buzzer", () => {
                 const turnPhase = GameUtil_1.default.GetTurnPhase(this.getGameState());
-                if (turnPhase.turnState == IGameTurn_1.TurnState.OPEN) {
-                    console.log("not opening buzzer, buzzer already open");
-                    return;
-                }
-                else if (turnPhase.turnState != IGameTurn_1.TurnState.CHOOSING &&
+                // if (turnPhase.turnState == TurnState.OPEN) {
+                //   console.log("not opening buzzer, buzzer already open");
+                //   return;
+                // } else
+                if (turnPhase.turnState != IGameTurn_1.TurnState.CHOOSING &&
                     turnPhase.gameTurn.question.isDailyDouble) {
                     //question won't exist is choosing is true
                     console.log("you cannot open buzzers during a daily double question");
@@ -106,11 +106,26 @@ class GameServer {
                 this.getServerStore().resetCurrentQuestion();
                 this.updateAllClientState();
             });
+            socket.on("player-submit-final-jeopardy", ({ answer, wager }) => {
+                const fromPlayer = this.getPlayerBySocketId(socket.id);
+                if (fromPlayer) {
+                    this.getServerStore().SubmitFinalJeopardyAnswer(fromPlayer, answer, wager);
+                    this.updateAllClientState();
+                }
+                else {
+                    console.error("got a buzz from a player that is not included in players");
+                }
+            });
             socket.on("player-submit-buzz", (timestamp) => {
                 //do comparrison, set timeout, etc.
-                const turnState = GameUtil_1.default.GetTurnPhase(this.getGameState()).turnState;
-                if (turnState != IGameTurn_1.TurnState.OPEN) {
+                const turnPhase = GameUtil_1.default.GetTurnPhase(this.getGameState());
+                if (turnPhase.turnState != IGameTurn_1.TurnState.OPEN) {
                     console.log("tried buzzing while the turn was not open, ignoring..");
+                    return;
+                }
+                if (turnPhase.turnState == IGameTurn_1.TurnState.OPEN &&
+                    turnPhase.gameTurn.isFinalJeopardy) {
+                    console.log("cannot buzz in during final jeopardy");
                     return;
                 }
                 const fromPlayer = this.getPlayerBySocketId(socket.id);
@@ -123,7 +138,7 @@ class GameServer {
                         console.log("preventing player from answering twice");
                         return;
                     }
-                    if (this.getGameState().currentTurnData.answerStack.some((answer) => answer.player.displayName == fromPlayer.displayName)) {
+                    if (turnPhase.gameTurn.answerStack.some((answer) => answer.player.displayName == fromPlayer.displayName)) {
                         console.log("player has already attempted an answer on this question, ignoring");
                         return;
                     }
@@ -139,18 +154,18 @@ class GameServer {
                             this.getServerStore().closeBuzzer();
                             console.log(`choosing from ${this.getGameState().currentTurnData.buzzHistory.length} players`);
                             //todo, make this a function to choose the winner, ideally it would be the top of the buzz history
-                            const player = this.getGameState().currentTurnData.buzzHistory[this.getGameState().currentTurnData.buzzHistory.length - 1].player;
-                            this.getServerStore().GivePlayerChanceToAnswer(player);
+                            const playersWhoBuzzedIn = this.getGameState().currentTurnData.buzzHistory.map((buzz) => buzz.player);
+                            const chosenPlayer = playersWhoBuzzedIn[Math.floor(playersWhoBuzzedIn.length * Math.random())];
+                            this.getServerStore().GivePlayerChanceToAnswer(chosenPlayer);
                             this.ClearAnswerCountdownTimeout();
                             this.StartAnswerCountdown();
                         }
                         this.updateAllClientState();
-                    }, Math.min(GameServer.BUZZ_SUBMIT_WINDOW, this.getGameState().currentTurnData.questionTimeLeft));
+                    }, Math.min(GameServer.BUZZ_SUBMIT_WINDOW));
                 }
                 else {
                     console.error("got a buzz from a player that is not included in players");
                 }
-                // this.updateAllClientState();
             });
             socket.on("player-place-wager", (amount) => {
                 const fromPlayer = this.getPlayerBySocketId(socket.id);
@@ -166,6 +181,15 @@ class GameServer {
             });
             socket.on("host-next-question", () => {
                 this.getServerStore().nextQuestion();
+                this.updateAllClientState();
+            });
+            socket.on("host-prev-question", () => {
+                console.log("pevv");
+                this.getServerStore().prevQuestion();
+                this.updateAllClientState();
+            });
+            socket.on("host-start-final-jeopardy", () => {
+                this.getServerStore().startFinalJeopardy();
                 this.updateAllClientState();
             });
             socket.on("host-reset-game", () => {
@@ -190,7 +214,9 @@ class GameServer {
                         this.getServerStore().resolveQuestion();
                     }
                     else {
-                        this.OpenBuzzer();
+                        if (!this.getGameState().currentTurnData.isFinalJeopardy) {
+                            this.OpenBuzzer();
+                        }
                     }
                 }
                 this.updateAllClientState();
@@ -198,15 +224,16 @@ class GameServer {
         });
     }
     OpenBuzzer() {
+        this.ClearQuestionCountdownTimeout();
         if (this.getGameState().currentTurnData.question == null) {
             console.error("cannot open up the buzzer if the current answer is not set");
             return;
         }
+        console.log("open buzzer");
         this.getServerStore().openBuzzer();
-        let seconds = 10;
+        let seconds = this.getGameState().currentTurnData.questionTimeLeft;
         const decrementSeconds = () => {
             this.getServerStore().SetTimeLeftForAllPlayersToAnswer(seconds);
-            this.updateAllClientState();
             if (seconds == 0) {
                 console.log("time out done");
                 if (this.getGameState().currentTurnData.buzzHistory.length == 0) {
@@ -215,17 +242,15 @@ class GameServer {
                 this.updateAllClientState();
                 return;
             }
-            if (GameUtil_1.default.GetTurnPhase(this.getGameState()).turnState != IGameTurn_1.TurnState.OPEN) {
-                console.log("canceling timeout, no longer in open state");
-            }
             seconds -= 1;
             this.questionCountdownTimeout = setTimeout(decrementSeconds, 1000);
+            this.updateAllClientState();
         };
         decrementSeconds();
     }
     StartAnswerCountdown() {
         this.ClearAnswerCountdownTimeout();
-        var seconds = 10;
+        var seconds = this.getGameState().currentTurnData.answerStack[0].answerTimeLeft;
         const decrementSeconds = () => {
             this.getServerStore().SetTimeLeftForPlayerToAnswer(seconds);
             this.updateAllClientState();
@@ -280,12 +305,14 @@ class GameServer {
                 socketId: null,
             }));
             serverStore_1.useServerGameStore.setState({ gameState: parsed });
-            if (GameUtil_1.default.GetTurnPhase(this.getGameState()).turnState == IGameTurn_1.TurnState.OPEN) {
+            const turnPhase = GameUtil_1.default.GetTurnPhase(this.getGameState());
+            console.log(turnPhase.turnState == IGameTurn_1.TurnState.OPEN, GameUtil_1.default.GetBuzzerStateStringFromEnum(turnPhase.gameTurn.buzzerState));
+            if (turnPhase.turnState == IGameTurn_1.TurnState.OPEN) {
                 this.OpenBuzzer();
             }
         }
         else {
-            const questions = await GameServer.CreateQuestionsFromGoogleSheet("18r3MSbXelmld3OgPJooMGLPieWx4vaUn5Ssv6jxYx8o", "Sheet2");
+            const questions = await GameServer.CreateQuestionsFromGoogleSheet("18r3MSbXelmld3OgPJooMGLPieWx4vaUn5Ssv6jxYx8o", "Sheet2", false);
             this.getServerStore().setQuestions(questions);
         }
     }
@@ -304,49 +331,23 @@ class GameServer {
         }
         return ret;
     }
-    static CreateQuestions() {
-        const ret = [];
-        const rows = 5;
-        const cols = 6;
-        var dailyDoubleOptions = [];
-        for (let row = 0; row < rows; row++) {
-            ret.push([]);
-            for (let col = 0; col < cols; col++) {
-                ret[row].push({
-                    isDailyDouble: false,
-                    question: `question from row ${row}, col ${col}?`,
-                    answer: `answer from row ${row}, col ${col}`,
-                    score: (row + 1) * 100,
-                    id: GameServer.cantorPair(row, col),
-                });
-                dailyDoubleOptions.push({ row, col });
-            }
-        }
-        dailyDoubleOptions = this.shuffleArr(dailyDoubleOptions);
-        for (let i = 0; i < 2; i++) {
-            const pos = dailyDoubleOptions[i];
-            ret[pos.row][pos.col].isDailyDouble = true;
-        }
-        return ret;
-    }
-    static async CreateQuestionsFromGoogleSheet(spreadsheetId, sheetName) {
-        console.log(spreadsheetId, sheetName);
+    static async CreateQuestionsFromGoogleSheet(spreadsheetId, sheetName, isDoubleJeopardy) {
         const parser = new public_google_sheets_parser_1.default(spreadsheetId, sheetName);
         const ret = [];
         var dailyDoubleOptions = [];
         const parsed = await parser.parse();
         const categories = Object.keys(parsed[0]);
         const rawQuestions = parsed.map((row) => Object.values(row));
-        for (let row = 0; row < 5; row++) {
+        for (let row = 0; row < GameUtil_1.default.ROWS; row++) {
             ret.push([]);
-            for (let col = 0; col < 6; col++) {
+            for (let col = 0; col < GameUtil_1.default.COLS; col++) {
                 const rowIndex = row * 2;
                 ret[row].push({
                     isDailyDouble: false,
                     question: rawQuestions[rowIndex][col],
                     answer: rawQuestions[rowIndex + 1][col],
-                    score: (row + 1) * 100,
-                    id: GameServer.cantorPair(row, col),
+                    score: (row + 1) * 200 * (isDoubleJeopardy ? 2 : 1),
+                    id: `${isDoubleJeopardy ? "double" : "single"}_${row}_${col}`,
                 });
                 dailyDoubleOptions.push({ row, col });
             }
@@ -363,5 +364,5 @@ class GameServer {
     }
 }
 GameServer.SAVE_PATH = path_1.default.resolve(__dirname, "gameState.json");
-GameServer.BUZZ_SUBMIT_WINDOW = 300;
+GameServer.BUZZ_SUBMIT_WINDOW = 400;
 exports.default = GameServer;
