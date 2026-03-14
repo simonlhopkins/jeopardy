@@ -63,11 +63,12 @@ export default function Play() {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden max-w-2xl p-2">
-      <SoundEffects gameState={gameState} />
-      <PlayerConnectionScreen
-        gameState={gameState}
-        getPlayerClient={getPlayerClient}
-      />
+      {!isInGame && (
+        <PlayerConnectionScreen
+          gameState={gameState}
+          getPlayerClient={getPlayerClient}
+        />
+      )}
       {isInGame && (
         // <PlayerGameScreen
         //   gameState={gameState}

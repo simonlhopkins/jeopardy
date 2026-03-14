@@ -39,6 +39,10 @@ export default class HostClient {
   public NextQuestion() {
     this.socket.emit("host-next-question");
   }
+  public PrevQuestion() {
+    this.socket.emit("host-prev-question");
+  }
+
   public ResetGame() {
     this.socket.emit("host-reset-game");
   }
@@ -54,10 +58,19 @@ export default class HostClient {
     this.socket.emit("host-reset-current-question");
   }
 
-  public UpdateGoogleSheet(sheetId: string, sheetName: string) {
+  public StartFinalJeopardy() {
+    this.socket.emit("host-start-final-jeopardy");
+  }
+
+  public UpdateGoogleSheet(
+    sheetId: string,
+    sheetName: string,
+    isDoubleJeopardy: boolean
+  ) {
     this.socket.emit("host-update-google-sheet", {
       sheetId,
       sheetName,
+      isDoubleJeopardy,
     });
   }
 }

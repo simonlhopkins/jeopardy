@@ -46,4 +46,12 @@ export default class PlayerClient {
     }
     this.socket.emit("player-place-wager", amount);
   }
+
+  public SubmitFinalJeopardyAnswer(answer: string, wager: number) {
+    if (!this.socket) {
+      console.log("socket does not exist yet");
+      return;
+    }
+    this.socket.emit("player-submit-final-jeopardy", { answer, wager });
+  }
 }

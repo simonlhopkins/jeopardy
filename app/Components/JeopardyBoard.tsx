@@ -18,7 +18,7 @@ export default function JeopardyBoard({
   showDailyDoubles,
 }: Props) {
   const turnPhase = GameUtil.GetTurnPhase(gameState);
-  const gridSquaresRef = useRef<Map<number, HTMLElement>>(null);
+  const gridSquaresRef = useRef<Map<string, HTMLElement>>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const gridParentRef = useRef<HTMLDivElement>(null);
 
@@ -33,10 +33,23 @@ export default function JeopardyBoard({
   useEffect(() => {
     const question = gameState.currentTurnData.question;
     if (!question) return;
+    var spawnRect = null;
     const squareEl = getGridSquaresMap().get(question.id);
-    const overlayEl = overlayRef.current!;
     if (squareEl) {
-      const squareRect = squareEl.getBoundingClientRect();
+      spawnRect = squareEl.getBoundingClientRect();
+    } else if (gameState.currentTurnData.isFinalJeopardy) {
+      const parentRect = gridParentRef.current!.getBoundingClientRect();
+      spawnRect = new DOMRect(
+        parentRect.x + parentRect.width / 2,
+        parentRect.y + parentRect.height / 2,
+        0,
+        0
+      );
+    }
+
+    const overlayEl = overlayRef.current!;
+    if (spawnRect) {
+      const squareRect = spawnRect;
       const parentRect = gridParentRef.current!.getBoundingClientRect();
 
       const left =
@@ -75,6 +88,8 @@ export default function JeopardyBoard({
           fill: "forwards",
         }
       );
+    } else {
+      console.log("no square element to spawn from...");
     }
   }, [gameState.currentTurnData.question?.id]);
 
@@ -148,8 +163,14 @@ export default function JeopardyBoard({
         </div>
       </div>
 
-      <div className="grid grid-rows-6 grid-cols-6 gap-2 h-full">
-        {gameState.categories.map((category, i) => (
+      <div
+        className={clsx("grid gap-2 h-full")}
+        style={{
+          gridTemplateRows: `repeat(${GameUtil.ROWS + 1}, 1fr)`,
+          gridTemplateColumns: `repeat(${GameUtil.COLS}, 1fr)`,
+        }}
+      >
+        {gameState.categories.slice(0, GameUtil.COLS).map((category, i) => (
           <div
             key={i}
             className={clsx(
@@ -161,49 +182,52 @@ export default function JeopardyBoard({
               className={clsx(
                 "text-center wrap-break-word text-wrap",
                 category.split(" ").some((word) => word.length > 8)
-                  ? "text-lg"
-                  : "text-2xl"
+                  ? "text-sm"
+                  : "text-xl"
               )}
             >
               {category}
             </p>
           </div>
         ))}
-        {gameState.questions.flat().map((question, i) => (
-          <div
-            className={clsx(
-              "flex justify-center items-center",
-              styles.boardSquare,
-              gameState.history.some(
-                (item) => item.question?.id == question.id
-              ) && "invisible",
-              showDailyDoubles &&
-                question.isDailyDouble &&
-                "border-yellow-300! border-2",
-              onQuestionClick != null && "cursor-pointer"
-            )}
-            ref={(node) => {
-              const map = getGridSquaresMap();
-              map.set(question.id, node!);
+        {gameState.questions
+          .map((row) => row.slice(0, GameUtil.COLS))
+          .flat()
+          .map((question, i) => (
+            <div
+              className={clsx(
+                "flex justify-center items-center",
+                styles.boardSquare,
+                gameState.history.some(
+                  (item) => item.question?.id == question.id
+                ) && "invisible",
+                showDailyDoubles &&
+                  question.isDailyDouble &&
+                  "border-yellow-300! border-2",
+                onQuestionClick != null && "cursor-pointer"
+              )}
+              ref={(node) => {
+                const map = getGridSquaresMap();
+                map.set(question.id, node!);
 
-              return () => {
-                map.delete(question.id);
-              };
-            }}
-            onClick={
-              onQuestionClick
-                ? () => {
-                    onQuestionClick(question);
-                  }
-                : undefined
-            }
-            key={i}
-          >
-            <p className={clsx("text-3xl text-[#dea154]")}>
-              {GameUtil.ConvertNumberToCurrency(question.score)}
-            </p>
-          </div>
-        ))}
+                return () => {
+                  map.delete(question.id);
+                };
+              }}
+              onClick={
+                onQuestionClick
+                  ? () => {
+                      onQuestionClick(question);
+                    }
+                  : undefined
+              }
+              key={i}
+            >
+              <p className={clsx("text-3xl text-[#dea154]")}>
+                {GameUtil.ConvertNumberToCurrency(question.score)}
+              </p>
+            </div>
+          ))}
       </div>
     </div>
   );

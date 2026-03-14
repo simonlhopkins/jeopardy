@@ -49,6 +49,7 @@ export default function QuestionStatusArea({ getHostClient }: Props) {
             <th>Player Name</th>
             <th>time left</th>
             <th>wager</th>
+            <th>final jeopardy answer</th>
             <th>result</th>
           </tr>
         </thead>
@@ -61,7 +62,9 @@ export default function QuestionStatusArea({ getHostClient }: Props) {
                 answer.result == AnswerResult.INCORRECT && "text-red-600"
               )}
             >
-              <td>{answer.player.displayName}</td>
+              <td title={`${answer.finalJeopardyAnswer}`}>
+                {answer.player.displayName}
+              </td>
               <td
                 className="relative"
                 style={{
@@ -83,37 +86,41 @@ export default function QuestionStatusArea({ getHostClient }: Props) {
                 {answer.answerTimeLeft}
               </td>
               <td>{answer.wager ?? "none"}</td>
+              <td>{answer.finalJeopardyAnswer ?? "none"}</td>
               <td>
-                {answer.result != null ? (
-                  GameUtil.GetAnswerResultNameFromEnum(answer.result)
-                ) : (
-                  <div>
-                    <button
-                      onClick={() =>
-                        getHostClient().AwardPlayerCorrectAnswer(answer.player)
-                      }
-                    >
-                      correct
-                    </button>
-                    <button
-                      onClick={() =>
-                        getHostClient().AwardPlayerIncorrectAnswer(
-                          answer.player
-                        )
-                      }
-                    >
-                      incorrect
-                    </button>
-                  </div>
-                )}
+                <div>
+                  <button
+                    className={clsx(
+                      answer.result == AnswerResult.CORRECT && "bg-green-400!"
+                    )}
+                    onClick={() =>
+                      getHostClient().AwardPlayerCorrectAnswer(answer.player)
+                    }
+                  >
+                    correct
+                  </button>
+                  <button
+                    className={clsx(
+                      answer.result == AnswerResult.INCORRECT && "bg-red-500!"
+                    )}
+                    onClick={() =>
+                      getHostClient().AwardPlayerIncorrectAnswer(answer.player)
+                    }
+                  >
+                    incorrect
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
-          {new Array(players.length - currentTurnData.answerStack.length)
+          {new Array(
+            Math.max(players.length - currentTurnData.answerStack.length, 0)
+          )
             .fill(0)
             .map((_, i) => (
               <tr key={`extra_${i}`}>
                 <td>&nbsp;</td>
+                <td />
                 <td />
                 <td />
                 <td />

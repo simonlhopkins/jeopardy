@@ -27,20 +27,6 @@
   --color-primary-focus: color-mix(in srgb, var(--jeopardyBlue) 60%, white);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 @font-face {
   font-family: Korinna;
   src: url("/fonts/itc-korinna-std/ITC-Korinna-Regular.otf") format("opentype");
@@ -66,8 +52,8 @@
   src: url("/fonts/Swiss911-bold.ttf") format("truetype");
 }
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: black;
+  color: white;
   font-family: Korinna, Helvetica, sans-serif;
   width: 100vw;
   height: 100svh;
@@ -81,7 +67,7 @@ table {
 }
 th,
 td {
-  border: 1px solid var(--foreground);
+  border: 1px solid white;
   padding: 8px;
   text-align: center;
   word-break: break-word;
@@ -90,8 +76,8 @@ td {
 }
 button {
   background: transparent;
-  color: var(--foreground);
-  border: 1px solid var(--foreground);
+  color: white;
+  border: 1px solid white;
   padding: 6px 12px;
   font: inherit;
   cursor: pointer;
@@ -100,8 +86,8 @@ button {
 }
 @media (hover: hover) {
   button:hover {
-    background: var(--foreground);
-    color: var(--background);
+    background: white;
+    color: black;
   }
 }
 button:disabled {

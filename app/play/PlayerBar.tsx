@@ -33,17 +33,35 @@ export default function PlayerBar({ gameState, username }: Props) {
         }
         return "👂";
       case TurnState.OPEN:
-        return GameUtil.GetPlayersWhoAnsweredIncorrect(gameState).some(
-          (answeredPlayer) => answeredPlayer.displayName == player.displayName
-        )
-          ? "😡"
-          : "💭";
+        if (turnPhase.gameTurn.isFinalJeopardy) {
+          turnPhase.gameTurn.answerStack.some(
+            (answer) => answer.player.displayName == player.displayName
+          )
+            ? "😌"
+            : "💭";
+        } else {
+          return GameUtil.GetPlayersWhoAnsweredIncorrect(gameState).some(
+            (answeredPlayer) => answeredPlayer.displayName == player.displayName
+          )
+            ? "😡"
+            : "💭";
+        }
+
       case TurnState.ANSWER:
-        return GameUtil.GetPlayerAnswering(
-          gameState.currentTurnData.answerStack
-        )?.displayName == player.displayName
-          ? "💬"
-          : "😨";
+        if (turnPhase.gameTurn.isFinalJeopardy) {
+          return GameUtil.GetPlayersWhoAnsweredIncorrect(gameState).some(
+            (answeredPlayer) => answeredPlayer.displayName == player.displayName
+          )
+            ? "😡"
+            : "💭";
+        } else {
+          return GameUtil.GetPlayerAnswering(
+            gameState.currentTurnData.answerStack
+          )?.displayName == player.displayName
+            ? "💬"
+            : "😨";
+        }
+
       case TurnState.RESOLVED:
         return GameUtil.GetPlayersWhoAnsweredCorrect(gameState)
           .map((player) => player.displayName)
@@ -52,6 +70,16 @@ export default function PlayerBar({ gameState, username }: Props) {
           : "😭";
     }
   }
+
+  const getFinalJeopardyAnswer = (player: IPlayer) => {
+    return gameState.currentTurnData.isFinalJeopardy
+      ? gameState.currentTurnData.answerStack.find(
+          (answer) =>
+            answer.player.displayName == player.displayName &&
+            answer.result != null
+        ) ?? null
+      : null;
+  };
 
   return (
     <div className="flex items-center gap-2 h-full">
@@ -75,7 +103,7 @@ export default function PlayerBar({ gameState, username }: Props) {
       ].map((player) => (
         <div
           key={player.socketId}
-          className="h-full border-2 flex items-center justify-center flex-col relative w-24"
+          className="h-full border-2 flex items-center justify-center flex-col relative p-2 min-w-24"
           style={{ background: getBGStyle(player, gameState) }}
         >
           <div
@@ -101,6 +129,9 @@ export default function PlayerBar({ gameState, username }: Props) {
               {player.displayName}
             </p>
           </div>
+          {getFinalJeopardyAnswer(player) && (
+            <div>{getFinalJeopardyAnswer(player)!.finalJeopardyAnswer}</div>
+          )}
         </div>
       ))}
     </div>
@@ -116,8 +147,12 @@ function getBGStyle(player: IPlayer, gameState: IGameState) {
       playerAnswerAttempt.result == AnswerResult.INCORRECT ? "red" : "green";
     return `linear-gradient(
         to right,
-        ${color} ${(playerAnswerAttempt.answerTimeLeft / 10) * 100}%,
-        transparent ${(playerAnswerAttempt.answerTimeLeft / 10) * 100}%
+        ${color} ${
+      (playerAnswerAttempt.answerTimeLeft / GameUtil.RESPONSE_TIME) * 100
+    }%,
+        transparent ${
+          (playerAnswerAttempt.answerTimeLeft / GameUtil.RESPONSE_TIME) * 100
+        }%
       )`;
   }
   return "";

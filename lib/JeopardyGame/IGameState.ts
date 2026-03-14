@@ -30,6 +30,7 @@ export function DefaultGameState(): IGameState {
     questions: [],
     history: [],
     currentTurnData: {
+      isFinalJeopardy: false,
       buzzerState: BuzzerState.CLOSED,
       question: null,
       answerStack: [],

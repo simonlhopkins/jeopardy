@@ -11,6 +11,7 @@ import IQuestion from "../JeopardyGame/IQuestion";
 import IBuzzerSubmitData from "../JeopardyGame/IBuzzerSubmitData";
 import { AnswerResult, TurnState } from "../JeopardyGame/IGameTurn";
 import { IJeopardyGameData } from "../JeopardyGame/IJeopardyGameData";
+import GameUtil from "../JeopardyGame/GameUtil";
 
 interface ServerStore {
   gameState: IGameState;
@@ -24,6 +25,8 @@ interface ServerStore {
   addBuzzToHistory: (buzzData: IBuzzerSubmitData) => void;
   placeWager: (fromPlayer: IPlayer, amount: number) => void;
   nextQuestion: () => void;
+  prevQuestion: () => void;
+  startFinalJeopardy: () => void;
   resolveQuestion: () => void;
   resetGame: () => void;
   resetCurrentQuestion: () => void;
@@ -32,6 +35,11 @@ interface ServerStore {
   SetTimeLeftForPlayerToAnswer: (secondsLeft: number) => void;
   SetTimeLeftForAllPlayersToAnswer: (secondsLeft: number) => void;
   GivePlayerChanceToAnswer: (player: IPlayer) => void;
+  SubmitFinalJeopardyAnswer: (
+    player: IPlayer,
+    answer: string,
+    wager: number
+  ) => void;
 }
 
 export const useServerGameStore = create<ServerStore>((set, get) => ({
@@ -100,6 +108,10 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
     set((store) => {
       const currentTurnData = { ...store.gameState.currentTurnData };
       currentTurnData.buzzerState = BuzzerState.OPEN;
+      currentTurnData.questionTimeLeft = store.gameState.currentTurnData
+        .isFinalJeopardy
+        ? 30
+        : GameUtil.RESPONSE_TIME;
       return {
         gameState: {
           ...store.gameState,
@@ -137,6 +149,7 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
         player: fromPlayer,
         wager: amount,
         result: null,
+        finalJeopardyAnswer: null,
       });
       return {
         gameState: { ...store.gameState, currentTurnData },
@@ -153,8 +166,51 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
           ...store.gameState,
           history: newHistory,
           currentTurnData: {
+            isFinalJeopardy: false,
             buzzerState: BuzzerState.CLOSED,
             question: null,
+            buzzHistory: [],
+            answerStack: [],
+            questionTimeLeft: GameUtil.BUZZ_IN_WINDOW_TIME,
+          },
+        },
+      };
+    }),
+  prevQuestion: () =>
+    set((store) => {
+      const newGameTurn = store.gameState.history.pop()!;
+      return {
+        gameState: {
+          ...store.gameState,
+          history: store.gameState.history,
+          currentTurnData: newGameTurn,
+        },
+      };
+    }),
+
+  startFinalJeopardy: () =>
+    set((store) => {
+      const newHistory = [
+        ...store.gameState.history,
+        store.gameState.currentTurnData,
+      ];
+      return {
+        gameState: {
+          ...store.gameState,
+          history: newHistory,
+          currentTurnData: {
+            isFinalJeopardy: true,
+            buzzerState: BuzzerState.CLOSED,
+            question: {
+              id: "final",
+              question:
+                "Affectionately named Nigel, this small, furry mammal was one of Kendra’s earliest pets.",
+              answer: "Rabbit",
+              score: 0,
+              isDailyDouble: false,
+              buzzHistory: [],
+              answerStack: [],
+            },
             buzzHistory: [],
             answerStack: [],
             questionTimeLeft: 10,
@@ -180,11 +236,12 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
         ...store.gameState,
         history: [],
         currentTurnData: {
+          isFinalJeopardy: false,
           buzzerState: BuzzerState.CLOSED,
           question: null,
           buzzHistory: [],
           answerStack: [],
-          questionTimeLeft: 10,
+          questionTimeLeft: GameUtil.BUZZ_IN_WINDOW_TIME,
         },
       },
     })),
@@ -193,11 +250,12 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       gameState: {
         ...store.gameState,
         currentTurnData: {
+          isFinalJeopardy: false,
           buzzerState: BuzzerState.CLOSED,
           question: null,
           buzzHistory: [],
           answerStack: [],
-          questionTimeLeft: 10,
+          questionTimeLeft: GameUtil.BUZZ_IN_WINDOW_TIME,
         },
       },
     })),
@@ -271,10 +329,46 @@ export const useServerGameStore = create<ServerStore>((set, get) => ({
       currentTurnData.buzzerState = BuzzerState.CLOSED;
       currentTurnData.answerStack.unshift({
         player,
-        answerTimeLeft: 10,
+        answerTimeLeft: GameUtil.RESPONSE_TIME,
         result: null,
         wager: null,
+        finalJeopardyAnswer: null,
       });
+      return {
+        gameState: {
+          ...store.gameState,
+          currentTurnData,
+        },
+      };
+    }),
+
+  SubmitFinalJeopardyAnswer: (player: IPlayer, answer: string, wager: number) =>
+    set((store) => {
+      const currentTurnData = { ...store.gameState.currentTurnData };
+      const existingAnswer = currentTurnData.answerStack.find(
+        (answer) => answer.player.displayName == player.displayName
+      );
+      if (existingAnswer) {
+        currentTurnData.answerStack = [
+          ...currentTurnData.answerStack.filter(
+            (answer) => answer.player.displayName != player.displayName
+          ),
+          {
+            ...existingAnswer,
+            wager: wager,
+            finalJeopardyAnswer: answer,
+          },
+        ];
+      } else {
+        currentTurnData.answerStack.push({
+          player,
+          answerTimeLeft: GameUtil.RESPONSE_TIME,
+          result: null,
+          wager,
+          finalJeopardyAnswer: answer,
+        });
+      }
+
       return {
         gameState: {
           ...store.gameState,

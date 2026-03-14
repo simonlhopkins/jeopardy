@@ -1,0 +1,35 @@
+.buzzButton {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  --buzzFill: orange;
+}
+
+.buzzButton:hover {
+  cursor: pointer;
+  color: var(--jeopardyBlue);
+  background-color: white;
+  border-width: 10px;
+  --buzzFill: white;
+}
+
+.answerButton {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  color: var(--jeopardyBlue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --answerFill: white;
+}
+
+.incorrect {
+  color: white;
+  --answerFill: red;
+}
+
+.correct {
+  --answerFill: green;
+  color: white;
+}

@@ -43,6 +43,15 @@ export default function Host() {
         e.preventDefault(); // prevents page scroll
         console.log("Space bar pressed!");
         getHostClient().OpenBuzzer();
+      } else if (e.code === "ArrowLeft") {
+        console.log("left");
+        e.preventDefault(); // prevents page scroll
+        console.log("prev");
+        getHostClient().PrevQuestion();
+      } else if (e.code === "ArrowRight") {
+        console.log("right");
+        e.preventDefault(); // prevents page scroll
+        getHostClient().NextQuestion();
       }
     };
 
@@ -93,10 +102,12 @@ export default function Host() {
           onSubmit={function (data: {
             spreadsheetName: string;
             sheetName: string;
+            isDoubleJeopardy: boolean;
           }): void {
             getHostClient().UpdateGoogleSheet(
               data.spreadsheetName,
-              data.sheetName
+              data.sheetName,
+              data.isDoubleJeopardy
             );
           }}
         />
@@ -127,7 +138,9 @@ export default function Host() {
           <p className="text-xl">
             {`state: ${GameUtil.GetTurnStateNameFromEnum(
               turnPhase.turnState
-            )} ${turnPhase.gameTurn.buzzerState}`}
+            )} [${GameUtil.GetBuzzerStateStringFromEnum(
+              turnPhase.gameTurn.buzzerState
+            )}]`}
           </p>
           <PlayerStatusArea
             getHostClient={getHostClient}
@@ -166,7 +179,13 @@ export default function Host() {
           >
             Reset Game
           </button>
-          <button onClick={() => {}}>trigger final jeopardy</button>
+          <button
+            onClick={() => {
+              getHostClient().StartFinalJeopardy();
+            }}
+          >
+            trigger final jeopardy
+          </button>
           <QuestionStatusArea getHostClient={getHostClient} />
         </div>
       </div>

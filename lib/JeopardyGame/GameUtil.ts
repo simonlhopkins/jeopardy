@@ -10,12 +10,16 @@ import IQuestion from "./IQuestion";
 
 interface QuestionData {
   question: IQuestion | null;
+  isFinalJeopardy: boolean;
   answers: IAnswerAttempt[];
 }
 
 export default class GameUtil {
   public static readonly BUZZ_IN_WINDOW_TIME = 5;
   public static readonly RESPONSE_TIME = 5;
+
+  public static readonly ROWS = 5;
+  public static readonly COLS = 4;
 
   public static GetTurnStateNameFromEnum(turnState: TurnState) {
     switch (turnState) {
@@ -45,6 +49,17 @@ export default class GameUtil {
     }
   }
 
+  public static GetBuzzerStateStringFromEnum(buzzerState: BuzzerState) {
+    switch (buzzerState) {
+      case BuzzerState.CLOSED:
+        return "CLOSED";
+      case BuzzerState.OPEN:
+        return "OPEN";
+      default:
+        "NOT DEFINED";
+    }
+  }
+
   public static GetAllConnectedPlayers(gameState: IGameState) {
     return gameState.players.filter((player) => player.socketId != null);
   }
@@ -53,7 +68,7 @@ export default class GameUtil {
     questionData: QuestionData,
     forPlayer: string
   ) {
-    if (questionData.question?.isDailyDouble) {
+    if (questionData.question?.isDailyDouble || questionData.isFinalJeopardy) {
       //look at the wagers
       const wagerAmount = questionData.answers.find(
         (answer) => answer.player.displayName == forPlayer
@@ -69,6 +84,7 @@ export default class GameUtil {
   public static GetPlayerScore(playerId: string, turns: IGameTurn[]) {
     const questionsPlayerHasAnswered: QuestionData[] = turns.map((turn) => ({
       question: turn.question,
+      isFinalJeopardy: turn.isFinalJeopardy,
       answers: turn.answerStack.filter(
         (answer) => answer.player.displayName == playerId
       ),
@@ -196,11 +212,9 @@ export default class GameUtil {
         },
       };
     } else {
-      const topAnswerIsCorrect =
-        currentTurnData.answerStack.findIndex(
-          (answer) => answer.result == AnswerResult.CORRECT
-        ) == 0;
-
+      const answerStackHasCorrectAnswer = currentTurnData.answerStack.some(
+        (answer) => answer.result == AnswerResult.CORRECT
+      );
       const allPlayersAnsweredWrong =
         this.GetEligiblePlayersForQuestion(currentTurnData.question, gameState)
           .length ==
@@ -209,9 +223,24 @@ export default class GameUtil {
         ).length;
       const noTimeLeft = currentTurnData.questionTimeLeft == 0;
 
-      if (topAnswerIsCorrect || allPlayersAnsweredWrong || noTimeLeft) {
+      //if there is a correct answer in the answer stack, there is no reason to not resolve the turn
+      if (
+        answerStackHasCorrectAnswer ||
+        allPlayersAnsweredWrong ||
+        (noTimeLeft &&
+          currentTurnData.answerStack.filter(
+            (answer) => answer.result == AnswerResult.INCORRECT
+          ).length == currentTurnData.answerStack.length)
+      ) {
         return {
           turnState: TurnState.RESOLVED,
+          gameTurn: { ...currentTurnData, question: currentTurnData.question },
+        };
+      }
+
+      if (currentTurnData.isFinalJeopardy && noTimeLeft) {
+        return {
+          turnState: TurnState.ANSWER,
           gameTurn: { ...currentTurnData, question: currentTurnData.question },
         };
       }
@@ -219,7 +248,7 @@ export default class GameUtil {
         currentTurnData.answerStack.findIndex(
           (answer) => answer.result == null
         ) == 0;
-      if (answerIsPending) {
+      if (answerIsPending && !currentTurnData.isFinalJeopardy) {
         return {
           turnState: TurnState.ANSWER,
           gameTurn: { ...currentTurnData, question: currentTurnData.question },
@@ -275,5 +304,9 @@ export default class GameUtil {
     return players.some(
       (player) => player.socketId == socketId && player.displayName == username
     );
+  }
+
+  public static IsFinalJeopardy(gameState: IGameState) {
+    return gameState.currentTurnData.isFinalJeopardy;
   }
 }

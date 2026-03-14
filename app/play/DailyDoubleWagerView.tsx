@@ -13,10 +13,10 @@ export default function DailyDoubleWagerView({
   username,
   getPlayerClient,
 }: Props) {
-  const [wagerSlider, setWagerSlider] = useState(50);
+  const [wagerSlider, setWagerSlider] = useState(0);
 
   return (
-    <div className="flex gap-2 items-center flex-col">
+    <div className="w-full h-full flex gap-2 items-center flex-col justify-center">
       <input
         type="range"
         min="0"

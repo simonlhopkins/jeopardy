@@ -1,5 +1,5 @@
 export default interface IQuestion {
-  id: number;
+  id: string;
   question: string;
   answer: string;
   score: number;

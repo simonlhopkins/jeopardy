@@ -9,6 +9,7 @@ export default interface IGameTurn {
   buzzHistory: IBuzzerSubmitData[];
   buzzerState: BuzzerState;
   questionTimeLeft: number;
+  isFinalJeopardy: boolean;
 }
 
 //used by the client UI
@@ -25,6 +26,7 @@ export interface IAnswerAttempt {
   answerTimeLeft: number;
   player: IPlayer;
   wager: number | null;
+  finalJeopardyAnswer: string | null;
 }
 
 export enum AnswerResult {

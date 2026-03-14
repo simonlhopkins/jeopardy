@@ -5,395 +5,180 @@
       "socketId": null
     },
     {
-      "displayName": "eric",
+      "displayName": "booo",
+      "socketId": null
+    },
+    {
+      "displayName": "hello",
       "socketId": null
     }
   ],
   "categories": [
-    "Brainium",
-    "Simon-core",
-    "Coding",
-    "Movie Prequels",
-    "Transportation",
-    "Wild Cards!"
+    "Broadway",
+    "Portland",
+    "The Sunshine State",
+    "Zoom Zoom Bitches",
+    "TODO"
   ],
   "questions": [
     [
       {
         "isDailyDouble": false,
-        "question": "These are the names of the 2 engineers that founded Brainium",
-        "answer": "Jake and Farhaud",
-        "score": 200,
-        "id": 0
+        "question": "Jonathan Groff from Lancaster, Pennsylvania worked up a posh English accent for this Broadway role in \"Hamilton\"",
+        "answer": "King George III",
+        "score": 400,
+        "id": "double_0_0"
       },
       {
         "isDailyDouble": false,
-        "question": "This is the name of the engineer who sits next to Simon",
-        "answer": "Noah",
-        "score": 200,
-        "id": 2
+        "question": "This is the current mayor of Portland",
+        "answer": "Keith Wilson",
+        "score": 400,
+        "id": "double_0_1"
       },
       {
         "isDailyDouble": false,
-        "question": "JS stands for this programming language created by Brendan Eich & trademarked in 1995",
-        "answer": " javascript",
-        "score": 200,
-        "id": 5
+        "question": "This bay area bridge connects San Francisco to Oakland",
+        "answer": "Bay Bridge",
+        "score": 400,
+        "id": "double_0_2"
       },
       {
         "isDailyDouble": false,
-        "question": "This prequel to \"Monsters, Inc.\" shows how Mike & Sully met in school & became unlikely friends",
-        "answer": "Monsters University",
-        "score": 200,
-        "id": 9
-      },
-      {
-        "isDailyDouble": false,
-        "question": "Constructed of iron & wood, a velocipede was an early (& uncomfortable) version of this vehicle",
-        "answer": " Motorcycle",
-        "score": 200,
-        "id": 14
-      },
-      {
-        "isDailyDouble": false,
-        "question": "That's nuts! The name of this card game tells you which card is wild--just its number, not its suit",
-        "answer": "Crazy Eights",
-        "score": 200,
-        "id": 20
+        "question": "This car company is named after the man credited for creating the assembly line",
+        "answer": "Ford",
+        "score": 400,
+        "id": "double_0_3"
       }
     ],
     [
       {
         "isDailyDouble": false,
-        "question": "This is the year that PlayStudios aquired Brainium",
-        "answer": "2022",
-        "score": 400,
-        "id": 1
+        "question": "Opened in 1917 and seating about 3,000 people, this downtown Portland venue hosts Broadway tours, opera, and ballet.",
+        "answer": "Keller Auditorium",
+        "score": 800,
+        "id": "double_1_0"
       },
       {
         "isDailyDouble": false,
-        "question": "This is the state that Simon grew up in",
-        "answer": " Utah",
-        "score": 400,
-        "id": 4
+        "question": "A Portland liberal arts college, or part of an oboe's mouthpiece",
+        "answer": "Reed",
+        "score": 800,
+        "id": "double_1_1"
       },
       {
         "isDailyDouble": false,
-        "question": "This is the base class that many Unity Scripts derive from",
-        "answer": "Monobehavior",
-        "score": 400,
-        "id": 8
+        "question": "This city is home to the NHL's Sharks",
+        "answer": "San Jose",
+        "score": 800,
+        "id": "double_1_2"
       },
       {
         "isDailyDouble": false,
-        "question": "A film subtitled \"The Ballad of Songbirds and Snakes\" takes place 64 years prior to the other four films in this series",
-        "answer": "The Hunger Games",
-        "score": 400,
-        "id": 13
-      },
-      {
-        "isDailyDouble": false,
-        "question": "Introduced in 1997, this Toyota model was the world's first mass-produced hybrid vehicle",
-        "answer": " a Prius",
-        "score": 400,
-        "id": 19
-      },
-      {
-        "isDailyDouble": false,
-        "question": "Another name for the card game solitaire is this, said to be a virtue",
-        "answer": "patience",
-        "score": 400,
-        "id": 26
+        "question": "What is the name of the Ford model used in Rally from 1999 to 2010",
+        "answer": "Focus",
+        "score": 800,
+        "id": "double_1_3"
       }
     ],
     [
-      {
-        "isDailyDouble": false,
-        "question": "This space themed word game was released by Brainium in 2022",
-        "answer": "Jumbline",
-        "score": 600,
-        "id": 3
-      },
-      {
-        "isDailyDouble": false,
-        "question": "This is the name of the company Simon worked at prior to his time at Brainium",
-        "answer": " Applovin",
-        "score": 600,
-        "id": 7
-      },
-      {
-        "isDailyDouble": false,
-        "question": "This purely functional programming language is named after a 20th‑century logician whose work helped inspire combinatory logic and functional programming concepts.",
-        "answer": "Haskell",
-        "score": 600,
-        "id": 12
-      },
-      {
-        "isDailyDouble": false,
-        "question": "Set amongst Comanches in the Great Plains, this prequel to \"Predator\" takes place in the early 1700s",
-        "answer": "Prey",
-        "score": 600,
-        "id": 18
-      },
-      {
-        "isDailyDouble": false,
-        "question": "The world's largest public BRT, or bus rapid transit system, is the Transjakarta bus system in this country",
-        "answer": "Indonesia",
-        "score": 600,
-        "id": 25
-      },
       {
         "isDailyDouble": true,
-        "question": "Draw 2, Wild & Reverse are cards in this game",
-        "answer": "Uno",
-        "score": 600,
-        "id": 33
+        "question": " \"Elphie\" was written some 30 years after this book that began a series following brave Elphaba",
+        "answer": "Wicked",
+        "score": 1200,
+        "id": "double_2_0"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "What is the bridge located farthest to the north in the City of Portland",
+        "answer": "St. Johns Bridge",
+        "score": 1200,
+        "id": "double_2_1"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "Kendra’s strong speaking skills may come from participating in this high school extracurricular activity focused on public speaking and argument.",
+        "answer": "Speech and debare",
+        "score": 1200,
+        "id": "double_2_2"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "The speed limit over the Fremont bridge",
+        "answer": "50 mph",
+        "score": 1200,
+        "id": "double_2_3"
       }
     ],
     [
       {
         "isDailyDouble": false,
-        "question": "This water vestibule appeared on the Lost Legacy cardback",
-        "answer": " a vase",
-        "score": 800,
-        "id": 6
+        "question": "Often compared to Broadway in New York, this London district is famous for its concentration of major theater productions.",
+        "answer": "West End",
+        "score": 1600,
+        "id": "double_3_0"
       },
       {
         "isDailyDouble": false,
-        "question": "It's the trademarked name for the game that uses a hollow white celluloid ball that's 40 mm in diameter",
-        "answer": " Ping Pong",
-        "score": 800,
-        "id": 11
+        "question": "what is the mushroom based, latte drink called, found in many Portland cafes",
+        "answer": "Changchinno",
+        "score": 1600,
+        "id": "double_3_1"
       },
       {
         "isDailyDouble": false,
-        "question": "Unlike \"ref\", this parameter modifier requires the called method to assign a value to the variable before returning, and is commonly seen paired with \"TryParse\" methods.",
-        "answer": "out.",
-        "score": 800,
-        "id": 17
+        "question": "The 2003 book and 2011 film Moneyball focused on this MLB team’s analytics-driven roster strategy under general manager Billy Beane.",
+        "answer": "Oakland Athletics",
+        "score": 1600,
+        "id": "double_3_2"
       },
       {
         "isDailyDouble": false,
-        "question": "\"Puss in Boots\", with this actor voicing the title feline, was a spin-off of \"Shrek 2\", as well as a prequel",
-        "answer": "Antonio Banderas",
-        "score": 800,
-        "id": 24
-      },
-      {
-        "isDailyDouble": false,
-        "question": "Traveling between the host city & Osaka, the first one of these began operating in 1964, just in time for the Tokyo Olympics",
-        "answer": "bullet train",
-        "score": 800,
-        "id": 32
-      },
-      {
-        "isDailyDouble": false,
-        "question": "The joker's (sometimes) wild in this type of poker that's an adaptation of an Asian domino game",
-        "answer": "Pai Gow",
-        "score": 800,
-        "id": 41
+        "question": "These are the names of the next 5 streets after Glison street in Portland's Alphebet District",
+        "answer": "Hoyt, Irving, Johnson, Kearney, Lovejoy",
+        "score": 1600,
+        "id": "double_3_3"
       }
     ],
     [
-      {
-        "isDailyDouble": false,
-        "question": "Which electric car company briefly partnered with Brainium to include its games in their vehicles",
-        "answer": "Tesla",
-        "score": 1000,
-        "id": 10
-      },
       {
         "isDailyDouble": true,
-        "question": "This is the name of Simon's cat",
-        "answer": "Eric",
-        "score": 1000,
-        "id": 16
+        "question": "This southern Oregon town hosts a Sharkspeare festival every year",
+        "answer": "Ashland",
+        "score": 2000,
+        "id": "double_4_0"
       },
       {
         "isDailyDouble": false,
-        "question": "Replacing the concept of \"null\" found in other languages, this standard library enum forces you to explicitly handle its Some and None variants.",
-        "answer": " Option",
-        "score": 1000,
-        "id": 23
+        "question": "These two words appear below \"Portland Oregon\" on the iconic White Stag sign",
+        "answer": "Old Town",
+        "score": 2000,
+        "id": "double_4_1"
       },
       {
         "isDailyDouble": false,
-        "question": "A prequel to \"The Mummy\", this film gave Dwayne \"The Rock\" Johnson his first starring role",
-        "answer": "The Scorpion King",
-        "score": 1000,
-        "id": 31
+        "question": "What is the name of one of the three cities in California's \"Tri-Cities\"",
+        "answer": "Fremont, Newark, Union City",
+        "score": 2000,
+        "id": "double_4_2"
       },
       {
         "isDailyDouble": false,
-        "question": "In the shipping & freight biz, this term refers to cargo that's being transported; a \"bill of\" it is kind of like a receipt",
-        "answer": " (a bill of) lading",
-        "score": 1000,
-        "id": 40
-      },
-      {
-        "isDailyDouble": false,
-        "question": "This trick-taking card game makes for a great Scrabble score, with a Z & a Q in its name",
-        "answer": "bezique",
-        "score": 1000,
-        "id": 50
+        "question": "This model of Subaru tragically called it quits on Simon's 23rd birthday",
+        "answer": "Outback",
+        "score": 2000,
+        "id": "double_4_3"
       }
     ]
   ],
-  "history": [
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": true,
-        "question": "This is the name of Simon's cat",
-        "answer": "Eric",
-        "score": 1000,
-        "id": 16
-      },
-      "buzzHistory": [],
-      "answerStack": [
-        {
-          "answerTimeLeft": 0,
-          "player": {
-            "displayName": "simon",
-            "socketId": "-GT1389xLLGlbTQXAAAG"
-          },
-          "wager": 50,
-          "result": 1
-        }
-      ],
-      "questionTimeLeft": 10
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "A film subtitled \"The Ballad of Songbirds and Snakes\" takes place 64 years prior to the other four films in this series",
-        "answer": "The Hunger Games",
-        "score": 400,
-        "id": 13
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": null,
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 10
-    },
-    {
-      "buzzerState": 1,
-      "question": null,
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 10
-    },
-    {
-      "buzzerState": 1,
-      "question": null,
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 10
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "Introduced in 1997, this Toyota model was the world's first mass-produced hybrid vehicle",
-        "answer": " a Prius",
-        "score": 400,
-        "id": 19
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "The world's largest public BRT, or bus rapid transit system, is the Transjakarta bus system in this country",
-        "answer": "Indonesia",
-        "score": 600,
-        "id": 25
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "This is the base class that many Unity Scripts derive from",
-        "answer": "Monobehavior",
-        "score": 400,
-        "id": 8
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "This prequel to \"Monsters, Inc.\" shows how Mike & Sully met in school & became unlikely friends",
-        "answer": "Monsters University",
-        "score": 200,
-        "id": 9
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "This purely functional programming language is named after a 20th‑century logician whose work helped inspire combinatory logic and functional programming concepts.",
-        "answer": "Haskell",
-        "score": 600,
-        "id": 12
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "Set amongst Comanches in the Great Plains, this prequel to \"Predator\" takes place in the early 1700s",
-        "answer": "Prey",
-        "score": 600,
-        "id": 18
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    },
-    {
-      "buzzerState": 1,
-      "question": {
-        "isDailyDouble": false,
-        "question": "\"Puss in Boots\", with this actor voicing the title feline, was a spin-off of \"Shrek 2\", as well as a prequel",
-        "answer": "Antonio Banderas",
-        "score": 800,
-        "id": 24
-      },
-      "buzzHistory": [],
-      "answerStack": [],
-      "questionTimeLeft": 0
-    }
-  ],
+  "history": [],
   "currentTurnData": {
+    "isFinalJeopardy": false,
     "buzzerState": 1,
     "question": null,
     "buzzHistory": [],
     "answerStack": [],
-    "questionTimeLeft": 10
+    "questionTimeLeft": 5
   }
 }

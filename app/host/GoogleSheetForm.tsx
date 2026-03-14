@@ -4,16 +4,21 @@ import { useState } from "react";
 export default function GoogleSheetForm({
   onSubmit,
 }: {
-  onSubmit: (data: { spreadsheetName: string; sheetName: string }) => void;
+  onSubmit: (data: {
+    spreadsheetName: string;
+    sheetName: string;
+    isDoubleJeopardy: boolean;
+  }) => void;
 }) {
   const spreadSheetId = useClientGameStore((store) => store.spreadsheetId);
   const sheetId = useClientGameStore((store) => store.sheetId);
+  const [isDoubleJeopardy, setIsDoubleJeopardy] = useState(false);
   const setSpreadSheetId = useClientGameStore(
     (store) => store.setSpreadsheetId
   );
   const setSheetId = useClientGameStore((store) => store.setSheetId);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (spreadSheetId && !spreadSheetId.trim()) return;
@@ -21,6 +26,7 @@ export default function GoogleSheetForm({
     onSubmit({
       spreadsheetName: (spreadSheetId || "").trim(),
       sheetName: (sheetId || "").trim(),
+      isDoubleJeopardy,
     });
   };
 
@@ -40,11 +46,16 @@ export default function GoogleSheetForm({
 
       <input
         type="text"
-        placeholder="Sheet name (optional)"
+        placeholder="Sheet name"
         value={sheetId || ""}
         onChange={(e) => setSheetId(e.target.value)}
         className="flex-1 border rounded px-3 py-2"
         required
+      />
+      <input
+        type="checkbox"
+        defaultChecked={isDoubleJeopardy}
+        onChange={(e) => setIsDoubleJeopardy(e.target.checked)}
       />
 
       <button
