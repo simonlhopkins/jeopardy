@@ -2,7 +2,7 @@
   "players": [
     {
       "displayName": "simon",
-      "socketId": null
+      "socketId": "qRFrEqHB9JmJLYWlAAAF"
     },
     {
       "displayName": "booo",
@@ -14,165 +14,287 @@
     }
   ],
   "categories": [
-    "Broadway",
-    "Portland",
-    "The Sunshine State",
-    "Zoom Zoom Bitches",
-    "TODO"
+    "Travel",
+    "F1",
+    "Media",
+    "Let's Go Shopping",
+    "TODO",
+    "TODO2"
   ],
   "questions": [
     [
       {
         "isDailyDouble": false,
-        "question": "Jonathan Groff from Lancaster, Pennsylvania worked up a posh English accent for this Broadway role in \"Hamilton\"",
-        "answer": "King George III",
-        "score": 400,
-        "id": "double_0_0"
+        "question": "Volcán de Fuego, is located in this central american country ",
+        "answer": "Guatamala",
+        "score": 200,
+        "id": "single_0_0"
       },
       {
         "isDailyDouble": false,
-        "question": "This is the current mayor of Portland",
-        "answer": "Keith Wilson",
-        "score": 400,
-        "id": "double_0_1"
+        "question": "This dominant driver won the 2024 Formula 1 season",
+        "answer": "Max Verstappen",
+        "score": 200,
+        "id": "single_0_1"
       },
       {
         "isDailyDouble": false,
-        "question": "This bay area bridge connects San Francisco to Oakland",
-        "answer": "Bay Bridge",
-        "score": 400,
-        "id": "double_0_2"
+        "question": "In this show Cillian Murphy played Tommy Shelby on the show about this real-life gang from Birmingham, England",
+        "answer": "Peaky blinders",
+        "score": 200,
+        "id": "single_0_2"
       },
       {
         "isDailyDouble": false,
-        "question": "This car company is named after the man credited for creating the assembly line",
-        "answer": "Ford",
-        "score": 400,
-        "id": "double_0_3"
+        "question": "Occupying an entire city block in downtown Portland, this bookstore is often called the world’s largest independent bookstore.",
+        "answer": "Powell's Bookstore",
+        "score": 200,
+        "id": "single_0_3"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 200,
+        "id": "single_0_4"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 200,
+        "id": "single_0_5"
       }
     ],
     [
       {
         "isDailyDouble": false,
-        "question": "Opened in 1917 and seating about 3,000 people, this downtown Portland venue hosts Broadway tours, opera, and ballet.",
-        "answer": "Keller Auditorium",
-        "score": 800,
-        "id": "double_1_0"
+        "question": "Much of this present-day capital stands on the former bed of Lake Texcoco",
+        "answer": "Mexico City",
+        "score": 400,
+        "id": "single_1_0"
       },
       {
         "isDailyDouble": false,
-        "question": "A Portland liberal arts college, or part of an oboe's mouthpiece",
-        "answer": "Reed",
-        "score": 800,
-        "id": "double_1_1"
+        "question": "These two teams made their Formula One debut in the 2026 season.",
+        "answer": "Audi and Cadillac",
+        "score": 400,
+        "id": "single_1_1"
       },
       {
         "isDailyDouble": false,
-        "question": "This city is home to the NHL's Sharks",
-        "answer": "San Jose",
-        "score": 800,
-        "id": "double_1_2"
+        "question": "Known for translating complex neuroscience into practical tips, this scientist created the “Huberman Lab” podcast.",
+        "answer": "Andrew Huberman",
+        "score": 400,
+        "id": "single_1_2"
       },
       {
         "isDailyDouble": false,
-        "question": "What is the name of the Ford model used in Rally from 1999 to 2010",
-        "answer": "Focus",
-        "score": 800,
-        "id": "double_1_3"
+        "question": "If you are shopping for a Cascadia truck, you're likely browsing this Portland based truck company's catalog",
+        "answer": "Daimler (Freightliner)",
+        "score": 400,
+        "id": "single_1_3"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 400,
+        "id": "single_1_4"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 400,
+        "id": "single_1_5"
       }
     ],
     [
+      {
+        "isDailyDouble": false,
+        "question": "The name of this tech company is a shortening of the California metropolis where it was founded by 2 Stanford computer scientists in 1984",
+        "answer": "Cisco",
+        "score": 600,
+        "id": "single_2_0"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "Heartthrob George Russell is a member of what F1 team?",
+        "answer": "Mercedes",
+        "score": 600,
+        "id": "single_2_1"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "Heather, Merideth, and Lisa are cast members in what Bravo Housewives Show?",
+        "answer": "The Real Housewives of Salt Lake City",
+        "score": 600,
+        "id": "single_2_2"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This type of small, chewable ice is often used in soft drinks and cocktails, popularized by Sonic Drive-In.",
+        "answer": "Pebble Ice",
+        "score": 600,
+        "id": "single_2_3"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 600,
+        "id": "single_2_4"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 600,
+        "id": "single_2_5"
+      }
+    ],
+    [
+      {
+        "isDailyDouble": false,
+        "question": "After crossing the bridge from Copenhagen Airport, travelers first enter this Swedish city.",
+        "answer": "Malmö",
+        "score": 800,
+        "id": "single_3_0"
+      },
       {
         "isDailyDouble": true,
-        "question": " \"Elphie\" was written some 30 years after this book that began a series following brave Elphaba",
-        "answer": "Wicked",
-        "score": 1200,
-        "id": "double_2_0"
+        "question": "Disgraced team priciple Christian Horner used to be the team priciple of this F1 team",
+        "answer": "Red Bull",
+        "score": 800,
+        "id": "single_3_1"
       },
-      {
-        "isDailyDouble": false,
-        "question": "What is the bridge located farthest to the north in the City of Portland",
-        "answer": "St. Johns Bridge",
-        "score": 1200,
-        "id": "double_2_1"
-      },
-      {
-        "isDailyDouble": false,
-        "question": "Kendra’s strong speaking skills may come from participating in this high school extracurricular activity focused on public speaking and argument.",
-        "answer": "Speech and debare",
-        "score": 1200,
-        "id": "double_2_2"
-      },
-      {
-        "isDailyDouble": false,
-        "question": "The speed limit over the Fremont bridge",
-        "answer": "50 mph",
-        "score": 1200,
-        "id": "double_2_3"
-      }
-    ],
-    [
-      {
-        "isDailyDouble": false,
-        "question": "Often compared to Broadway in New York, this London district is famous for its concentration of major theater productions.",
-        "answer": "West End",
-        "score": 1600,
-        "id": "double_3_0"
-      },
-      {
-        "isDailyDouble": false,
-        "question": "what is the mushroom based, latte drink called, found in many Portland cafes",
-        "answer": "Changchinno",
-        "score": 1600,
-        "id": "double_3_1"
-      },
-      {
-        "isDailyDouble": false,
-        "question": "The 2003 book and 2011 film Moneyball focused on this MLB team’s analytics-driven roster strategy under general manager Billy Beane.",
-        "answer": "Oakland Athletics",
-        "score": 1600,
-        "id": "double_3_2"
-      },
-      {
-        "isDailyDouble": false,
-        "question": "These are the names of the next 5 streets after Glison street in Portland's Alphebet District",
-        "answer": "Hoyt, Irving, Johnson, Kearney, Lovejoy",
-        "score": 1600,
-        "id": "double_3_3"
-      }
-    ],
-    [
       {
         "isDailyDouble": true,
-        "question": "This southern Oregon town hosts a Sharkspeare festival every year",
-        "answer": "Ashland",
-        "score": 2000,
-        "id": "double_4_0"
+        "question": "After appearing on Love Island USA, this reality TV personality won the latest season of the Traitors.",
+        "answer": "Rob Rausch",
+        "score": 800,
+        "id": "single_3_2"
       },
       {
         "isDailyDouble": false,
-        "question": "These two words appear below \"Portland Oregon\" on the iconic White Stag sign",
-        "answer": "Old Town",
-        "score": 2000,
-        "id": "double_4_1"
+        "question": "You might find an \"Ocean Roll\" in this Portland Bakery",
+        "answer": "Sparrow Bakery",
+        "score": 800,
+        "id": "single_3_3"
       },
       {
         "isDailyDouble": false,
-        "question": "What is the name of one of the three cities in California's \"Tri-Cities\"",
-        "answer": "Fremont, Newark, Union City",
-        "score": 2000,
-        "id": "double_4_2"
+        "question": "todo",
+        "answer": "todo",
+        "score": 800,
+        "id": "single_3_4"
       },
       {
         "isDailyDouble": false,
-        "question": "This model of Subaru tragically called it quits on Simon's 23rd birthday",
-        "answer": "Outback",
-        "score": 2000,
-        "id": "double_4_3"
+        "question": "todo",
+        "answer": "todo",
+        "score": 800,
+        "id": "single_3_5"
+      }
+    ],
+    [
+      {
+        "isDailyDouble": false,
+        "question": "This is the name of the city that Kendra's Mom lives in",
+        "answer": "San Diego",
+        "score": 1000,
+        "id": "single_4_0"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This tiny sovereign city-state on the French Riviera hosts one of Formula One’s most famous races each year.",
+        "answer": "Monoco",
+        "score": 1000,
+        "id": "single_4_1"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "This sitcom follows a group of teenagers growing up in Northern Ireland during the final years of the Troubles.",
+        "answer": "Derry Girls",
+        "score": 1000,
+        "id": "single_4_2"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "Talk about a good purchase! This is the name of the cat kendra bought during Covid",
+        "answer": "Astrid",
+        "score": 1000,
+        "id": "single_4_3"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 1000,
+        "id": "single_4_4"
+      },
+      {
+        "isDailyDouble": false,
+        "question": "todo",
+        "answer": "todo",
+        "score": 1000,
+        "id": "single_4_5"
       }
     ]
   ],
-  "history": [],
+  "history": [
+    {
+      "isFinalJeopardy": false,
+      "buzzerState": 1,
+      "question": {
+        "isDailyDouble": false,
+        "question": "If you are shopping for a Cascadia truck, you're likely browsing this Portland based truck company's catalog",
+        "answer": "Daimler (Freightliner)",
+        "score": 400,
+        "id": "single_1_3"
+      },
+      "buzzHistory": [],
+      "answerStack": [
+        {
+          "player": {
+            "displayName": "simon",
+            "socketId": "XsELYp5Ww_BsX9PXAAAJ"
+          },
+          "answerTimeLeft": 0,
+          "result": 0,
+          "wager": null,
+          "finalJeopardyAnswer": null
+        }
+      ],
+      "questionTimeLeft": 2
+    },
+    {
+      "isFinalJeopardy": false,
+      "buzzerState": 1,
+      "question": {
+        "isDailyDouble": false,
+        "question": "This type of small, chewable ice is often used in soft drinks and cocktails, popularized by Sonic Drive-In.",
+        "answer": "Pebble Ice",
+        "score": 600,
+        "id": "single_2_3"
+      },
+      "buzzHistory": [],
+      "answerStack": [
+        {
+          "player": {
+            "displayName": "simon",
+            "socketId": "qRFrEqHB9JmJLYWlAAAF"
+          },
+          "answerTimeLeft": 0,
+          "result": 0,
+          "wager": null,
+          "finalJeopardyAnswer": null
+        }
+      ],
+      "questionTimeLeft": 2
+    }
+  ],
   "currentTurnData": {
     "isFinalJeopardy": false,
     "buzzerState": 1,

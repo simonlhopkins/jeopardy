@@ -19,7 +19,7 @@ export default class GameUtil {
   public static readonly RESPONSE_TIME = 5;
 
   public static readonly ROWS = 5;
-  public static readonly COLS = 4;
+  public static readonly COLS = 6;
 
   public static GetTurnStateNameFromEnum(turnState: TurnState) {
     switch (turnState) {
@@ -169,7 +169,10 @@ export default class GameUtil {
   ) {
     const turnPhase = GameUtil.GetTurnPhase(gameState);
     return (
-      turnPhase.turnState != TurnState.OPEN ||
+      !(
+        turnPhase.turnState == TurnState.OPEN ||
+        turnPhase.turnState == TurnState.READING
+      ) ||
       gameState.currentTurnData.answerStack
         .filter((answer) => answer.result == AnswerResult.INCORRECT)
         .some((answer) => answer.player.displayName == username) ||

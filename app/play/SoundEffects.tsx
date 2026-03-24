@@ -81,7 +81,7 @@ export default function SoundEffects({ gameState, username }: Props) {
     if (turnPhase.turnState == TurnState.CHOOSING) {
       if (gameState.history.length == 0) {
         audio.currentTime = 0;
-        audio.play();
+        // audio.play();
       }
     } else {
       audio.pause();

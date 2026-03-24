@@ -7,6 +7,7 @@ import {
   TurnPhase,
   TurnState,
 } from "@/lib/JeopardyGame/IGameTurn";
+import { useRef, useState } from "react";
 interface Props {
   turnPhase: TurnPhase;
   username: string;
@@ -20,14 +21,23 @@ export default function BuzzButton({
   username,
   disabled,
 }: Props) {
+  // const timeoutRef = useRef<number>();
+  const [earlyBuzz, setEarlyBuzz] = useState<boolean>(false);
   return (
     <button
-      disabled={disabled}
+      disabled={disabled || earlyBuzz}
       style={{ background: getBuzzBgStyle(turnPhase, username) }}
       onClick={() => {
-        getPlayerClient().SubmitBuzz();
+        if (turnPhase.turnState != TurnState.OPEN) {
+          setEarlyBuzz(true);
+          setTimeout(() => {
+            setEarlyBuzz(false);
+          }, 2000);
+        } else {
+          getPlayerClient().SubmitBuzz();
+        }
       }}
-      className={clsx(styles.buzzButton)}
+      className={clsx(styles.buzzButton, earlyBuzz && styles.earlyBuzz)}
     >
       <p className="text-3xl">BUZZ</p>
     </button>

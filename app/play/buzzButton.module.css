@@ -12,6 +12,9 @@
   border-width: 10px;
   --buzzFill: white;
 }
+.earlyBuzz {
+  background-color: red;
+}
 
 .answerButton {
   width: 100%;
